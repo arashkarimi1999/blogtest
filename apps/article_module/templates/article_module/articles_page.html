@@ -1,0 +1,58 @@
+{% extends 'shared/index.html' %}
+{% load render_partial %}
+{% load sorl_thumbnail %}
+{% block title %}
+    مقالات 
+{% endblock %}
+
+{% block body %}
+    <body id="blog-2" class="page">
+    <main>
+  <div class="page-heading text-center">
+    <div class="container">
+      <h2>بلاگ</h2>
+    </div>
+  </div>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-9">
+            {% for articles in article %}
+                    <div class="blog-item clearfix"> <div class="blog-item clearfix">
+                        {% thumbnail articles.image "1080x700" quality=100 crop="center"  as image %}
+                              <img src="{{ image.url }}" alt="blog-single" class="resp-img">
+                        {% endthumbnail %}
+                    </div>
+          <h3>{{ articles.title }}</h3>
+          <div class="author"> <a href="#"> {{ articles.selected_categories.all|join:" / " }}  </a><br> <span> {{articles.date }} - {{ articles.writer }}   </span> </div>
+          <p class="abs"> {{ articles.short_description }} <a href="{% url "article:article-detail"  articles.slug %}" class="pull-right greybutton">خواندن ادامه</a> </div>
+            {% endfor %}
+
+
+        <div class="paginations">
+
+            {% if page_obj.has_previous %}
+                <a class="prev" href="?page={{ page_obj.previous_page_number }}"><i class="zmdi zmdi-chevron-right"></i>قبلی</a>
+            {% endif %}
+
+           {% for page in paginator.page_range %}
+            <a href="?page={{ page }}" class="{% if page_obj.number == page%} active {% endif %} " >{{ page }}</a>
+           {% endfor %}
+
+
+           {% if page_obj.has_next %}
+             <a class="next" href="?page={{ page_obj.next_page_number }}">بعدی<i class="zmdi zmdi-chevron-left"></i></a> </div>
+           {% endif %}
+      </div>
+      <div class="col-lg-3 blog-sidebar">
+        <div class="search-something">
+          <input type="search" placeholder="دنبال چه چیزی هستید؟">
+          <a href="#"><i class="zmdi zmdi-search"></i></a> </div>
+        <h4>پست های اخیر</h4>
+          {% render_partial "apps.article_module.views.latest_articles_components" %}
+        {% render_partial 'apps.article_module.views.article_categories_component' %}
+      </div>
+    </div>
+  </div>
+</main>
+    </body>
+{% endblock %}
