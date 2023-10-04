@@ -6,6 +6,33 @@ from apps.user_module.models import User
 
 
 class RegisterForm(forms.Form):
+
+    
+    
+    first_name=forms.CharField(label="first_name",
+    widget=forms.TextInput(attrs={
+                                'class': "req",
+                                'placeholder': "firstname",
+                                'name': 'firstname',
+                                'type': "firstname"
+                            }))
+
+    last_name=forms.CharField(label="last_name",
+    widget=forms.TextInput(attrs={
+                                'class': "req",
+                                'placeholder': "lastname",
+                                'name': 'lastname',
+                                'type': "lastname"
+                            }))
+    
+    phone_number=forms.CharField(label="phone_number",
+    widget=forms.TextInput(attrs={
+                                'class': "req",
+                                'placeholder': "phonenumber",
+                                'name': 'phonenumber',
+                                'type': "phonenumber"
+                            }))
+
     email = forms.CharField(label="email",
                             widget=forms.TextInput(attrs={
                                 'class': "req",
@@ -27,6 +54,9 @@ class RegisterForm(forms.Form):
             'type': "password",
             'placeholder': "password confirmation",
         }))
+    
+    
+
 
     # def clean_username(self):
     #     username = self.cleaned_data.get("username")
@@ -85,12 +115,7 @@ class EditPanelForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username','number','avatar']
-        username = forms.CharField(widget=forms.TextInput(attrs= {
-            'class': "login-form",
-            'placeholder': "username   ",
-            'name': 'name',
-            'type': "text"
-        }))
+        
         widgets = {
             'first_name': forms.TextInput( attrs={
                 'class': "req",
