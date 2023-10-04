@@ -2,7 +2,7 @@
 
 
 {% block title %}
-جزییات مقاله
+article detail
 {% endblock %}
 {% block body %}
 
@@ -20,7 +20,7 @@
         <div class="author"> <a href="#"> {{ article.writer  }} </a><span>  {{ article.date }}  </span> </div>
             <p>{{ article.text }}</p>
           <div class="about-author">
-          <h4>درباره نویسنده</h4>
+          <h4>about writer  </h4>
                  {{ article.writer.avatar }}
                                <img style="padding: 10px" src="{{ image.url}}" alt="Avatar" class="pull-left">
                                 
@@ -67,7 +67,7 @@
     </form>
       </div>
 
-        <h4>پست های اخیر</h4>
+        <h4>last post</h4>
         {% for latest_article in latest_articles %}
         <div class="recent-post clearfix"> {{latest_article.image}}
         <img src="{{ image.url }}" alt="recent" class="pull-left"> 
@@ -78,7 +78,7 @@
     {% endfor %}
 
     <div class="categories">
-      <h6>دسته بندی ها</h6>
+      <h6>categories</h6>
       <ul>
      {% for category in categories %}
            <li><a href="{% url "article:article-list-by-category" category.title %}">{{ category }} ({{ category.aricle_count }})</a></li>
