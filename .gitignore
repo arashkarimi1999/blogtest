@@ -2,8 +2,5 @@
 # venv
 /blogenv
 
-# database
-db.sqlite3
-
 
 __*
