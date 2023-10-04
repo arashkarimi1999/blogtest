@@ -89,7 +89,11 @@ class RegisterView(View):
                 form.add_error("email", 'user with this information is already exists ')
             else:
                 new_user = User(email=email_user, activation_code=get_random_string(5), is_active=False,
-                                username=email_user)
+                                username=email_user,
+                                first_name=form.cleaned_data.get("first_name"),
+                                last_name=form.cleaned_data.get("last_name"),
+                                number=form.cleaned_data.get("phone_number"))
+
                 new_user.set_password(password)
                 new_user.save()
                 send_mail("email verififcation code",{"user" : user},"user_module/email/activate_mail.html",new_user.email,)
