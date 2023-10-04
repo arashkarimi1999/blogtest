@@ -8,7 +8,7 @@
     <body id="contact" class="page">
 <div class="page-heading text-center">
     <div class="container">
-      <h2> ورود  </h2>
+      <h2> login  </h2>
     </div>
   </div>
   <div class="container success">
@@ -17,15 +17,15 @@
         {% csrf_token %}
       <div class="row">
                 <div class="col-sm-6 col-md-offset-3">
-                    <h4 > ورود کاربر</h4>
+                    <h4 > login</h4>
 						<form method="post" action="{% url 'user:login' %}" >
                              {% csrf_token %}
                             {{ login_form }}
-    <p><a href="{% url "user:forget_password" %}">فراموشی رمز عبور</a></p>
+    <p><a href="{% url "user:forget_password" %}">forget_password</a></p>
       <div class="row clearfix">
         <div class="col-sm-12">
           <div class="pull-right">
-            <button type="submit" name="submit" class="greybutton" >ورود </button>
+            <button type="submit" name="submit" class="greybutton" >login </button>
           </div>
         </div>
       </div>

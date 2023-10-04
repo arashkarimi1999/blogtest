@@ -6,19 +6,19 @@ from PIL import Image
 
 # Create your models here.
 class User(AbstractUser):
-    activation_code = models.CharField(max_length=200, verbose_name='ایمیل فعال سازی')
-    about = models.TextField(verbose_name="درباره شخص",null=True,blank=True)
+    activation_code = models.CharField(max_length=200, verbose_name='email-code verification')
+    about = models.TextField(verbose_name="about user",null=True,blank=True)
 
-    number =  models.IntegerField(blank=True,null=True,verbose_name="شماره همراه")
+    number =  models.IntegerField(blank=True,null=True,verbose_name="mobile-phone")
 
     # talent=models.ManyToManyField(TalentCategory,blank=False,verbose_name="مهارت یا دسته بندی مورد علاقه ")
-    avatar = models.ImageField(verbose_name='آواتار',null=True,blank=True,upload_to="User-avatar",)
+    avatar = models.ImageField(verbose_name='avatar',null=True,blank=True,upload_to="User-avatar",)
     
 
     class Meta:
 
-        verbose_name_plural = 'کاربران'
-        verbose_name = 'کاربر'
+        verbose_name_plural = 'Users'
+        verbose_name = 'User'
 
     def __str__(self):
         if self.first_name is not  "" and self.last_name is not  "":

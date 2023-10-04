@@ -1,0 +1,31 @@
+{% load thumbnail %}
+  <header>
+
+  <div class="container">
+      <div class="row">
+        <div class="col-md-12 text-center ">
+
+<h2 class="wow pulse">{{ sliders.title}}</h2>
+          <p>{{ sliders.short_description }}</p>
+
+          <a href="{% url "user:register" %}" class="bluebutton wow fadeInDown">ثبت نام کنید و یادگیری را آغاز کنید.</a>
+        </div>
+      </div>
+  <ul class="rslides-header">
+        {% for slider in sliders.slidergallery.all %}
+
+    <li>
+    {% thumbnail slider.images "2080x800" quality=100 crop="center"  as image %}
+                               <img src="{{ image.url}}" class="resp-img" alt="Slider">
+                                {% endthumbnail %}</li>
+        {% endfor %}
+  </ul>
+
+
+
+
+  <a href="#" class="scrolldown"><span></span></a> </header>
+
+
+    </div>
+

@@ -1,0 +1,43 @@
+
+{% block title %}
+    welcome
+{% endblock %}
+
+{% block body %}
+    
+
+
+<header>
+  
+  <div class="container">
+    <div id="topbar">
+      <div class="pull-right">
+        <div class="navigation">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar"> <i class="zmdi zmdi-menu zmdi-hc-lg"></i> </button>
+          <nav class="collapse navbar-collapse" id="myNavbar">
+            <ul>
+              <li class="active"> <a href="{% url "home:home_page" %}">home</a>
+              </li>
+                <li> <a href="{% url "article:article-list" %}">articles</a>
+        </div>
+          {% if request.user.is_authenticated %}
+              {% if request.user.is_superuser %}
+                    <a href="/admin" class="register"> admin panel</a>
+              {% endif %}
+              <a href="{% url "user:logout" %}" class="register">logout</a>
+              <a href="{% url "user:user-panel" %}" class="register">user panel </a>
+                      
+          {% else %}
+        <a href="{% url 'user:login' %}" class="blueplay login">login</a>
+          <a href="{% url "user:register" %}" class="register">signup </a>
+            {% endif %}
+        
+  </div>
+</header>
+
+
+
+
+
+ </body>
+{% endblock %}

@@ -66,7 +66,7 @@ class EditUserPasswordView(View):
                 current_user.save()
                 return redirect(reverse("user:login"))
             else :
-                edit_form.add_error("current_password" , 'رمز عبور به درستی وارد نشده است ')
+                edit_form.add_error("current_password" , 'password is incorrect ')
         return render(request, 'user_module/user-pass-edit.html', context)
 class RegisterView(View):
 
@@ -86,13 +86,13 @@ class RegisterView(View):
             user: bool = User.objects.filter(email__iexact=email_user).first()
 
             if user:
-                form.add_error("email", 'حسابی با این مشخصات موجود است')
+                form.add_error("email", 'user with this information is already exists ')
             else:
                 new_user = User(email=email_user, activation_code=get_random_string(5), is_active=False,
                                 username=email_user)
                 new_user.set_password(password)
                 new_user.save()
-                send_mail("ایمیل فعال سازی",{"user" : user},"user_module/email/activate_mail.html",new_user.email,)
+                send_mail("email verififcation code",{"user" : user},"user_module/email/activate_mail.html",new_user.email,)
                 return redirect(reverse('user:login'))
         context = {
             "register_form": form
@@ -130,16 +130,16 @@ class LoginView(View):
             user: User = User.objects.filter(email__iexact=user_email).first()
             if user is not None:
                 if not user.is_active:
-                    login_form.add_error('email', 'حساب کاربری شما فعال نشده است')
+                    login_form.add_error('email', 'user is not activated  ')
                 else:
                     is_password_correct = user.check_password(user_pass)
                     if is_password_correct:
                         login(request, user)
-                        return redirect(reverse('home:home_page'))
+                        return redirect(reverse("home:home_page"))
                     else:
-                        login_form.add_error('email', 'کلمه عبور اشتباه است')
+                        login_form.add_error('email', 'wrong password ')
             else:
-                login_form.add_error('email', 'کاربری با مشخصات وارد شده یافت نشد')
+                login_form.add_error('email', 'user not found ')
 
         context = {
             'login_form': login_form
@@ -151,7 +151,7 @@ class LoginView(View):
 class LogoutView(View):
     def get(self,request):
         logout(request)
-        return redirect(reverse("user:login"))
+        return redirect(reverse("home:home_page"))
 
 class ForgetPasswordView(View):
     def get(self, request):
@@ -167,8 +167,8 @@ class ForgetPasswordView(View):
             email = forget_pass_form.cleaned_data.get("email")
             user: User = User.objects.filter(email__iexact=email).first()
             if user is not None :
-                forget_pass_form.add_error("email", "کاربری با این ایمیل وجود ندارد")
-            send_mail("ایمیل فعال سازی", {"user": user}, "user_module/email/reset_code.html", user.email )
+                forget_pass_form.add_error("email", "user with this email already exists")
+            send_mail("email code verigication", {"user": user}, "user_module/email/reset_code.html", user.email )
             return redirect(reverse("user:reset-password"))
 
         context = {

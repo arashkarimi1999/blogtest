@@ -8,7 +8,7 @@
     <body id="contact" class="page">
 <div class="page-heading text-center">
     <div class="container">
-      <h2> ثبت نام </h2>
+      <h2>sign </h2>
     </div>
   </div>
   <div class="container success">
@@ -17,7 +17,7 @@
         {% csrf_token %}
       <div class="row">
                 <div class="col-sm-6 col-md-offset-3">
-                    <h4 > ثبت نام کاربر</h4>
+                    <h4 > sign-up  </h4>
 						<form method="post" action="{% url 'user:register' %}" >
                              {% csrf_token %}
                             {{ register_form }}
@@ -25,7 +25,7 @@
       <div class="row clearfix">
         <div class="col-sm-12">
           <div class="pull-right">
-            <button type="submit" name="submit" class="greybutton" >ثبت نام </button>
+            <button type="submit" name="submit" class="greybutton" >sign-up  </button>
           </div>
         </div>
       </div>
