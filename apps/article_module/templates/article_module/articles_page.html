@@ -2,7 +2,7 @@
 {% comment %} {% load render_partial %}
 {% load sorl_thumbnail %} {% endcomment %}
 {% block title %}
-    مقالات 
+    articles  
 {% endblock %}
 
 {% block body %}
@@ -10,7 +10,7 @@
     <main>
   <div class="page-heading text-center">
     <div class="container">
-      <h2>بلاگ</h2>
+      <h2>blog </h2>
     </div>
   </div>
   <div class="container">
@@ -24,14 +24,14 @@
                     </div>
           <h3>{{ articles.title }}</h3>
           <div class="author"> <a href="#"> {{ articles.selected_categories.all|join:" / " }}  </a><br> <span> {{articles.date }} - {{ articles.writer }}   </span> </div>
-          <p class="abs"> {{ articles.short_description }} <a href="{% url "article:article-detail"  articles.slug %}" class="pull-right greybutton">خواندن ادامه</a> </div>
+          <p class="abs"> {{ articles.short_description }} <a href="{% url "article:article-detail"  articles.slug %}" class="pull-right greybutton">more  </a> </div>
             {% endfor %}
 
 
         <div class="paginations">
 
             {% if page_obj.has_previous %}
-                <a class="prev" href="?page={{ page_obj.previous_page_number }}"><i class="zmdi zmdi-chevron-right"></i>قبلی</a>
+                <a class="prev" href="?page={{ page_obj.previous_page_number }}"><i class="zmdi zmdi-chevron-right"></i>previpus  </a>
             {% endif %}
 
            {% for page in paginator.page_range %}
@@ -40,12 +40,12 @@
 
 
            {% if page_obj.has_next %}
-             <a class="next" href="?page={{ page_obj.next_page_number }}">بعدی<i class="zmdi zmdi-chevron-left"></i></a> </div>
+             <a class="next" href="?page={{ page_obj.next_page_number }}">next <i class="zmdi zmdi-chevron-left"></i></a> </div>
            {% endif %}
       </div>
       
         
-        <h4>پست های اخیر</h4>
+        <h4>last posts   </h4>
         {% for latest_article in latest_articles %}
         <div class="recent-post clearfix"> {{latest_article.image}}
         <img src="{{ image.url }}" alt="recent" class="pull-left">
@@ -54,7 +54,7 @@
     {% endfor %}
     </div>
     <div class="categories">
-      <h6>دسته بندی ها</h6>
+      <h6>  categories </h6>
       <ul>
      {% for category in categories %}
            <li><a href="{% url "article:article-list-by-category" category.title %}">{{ category }} ({{ category.aricle_count }})</a></li>
