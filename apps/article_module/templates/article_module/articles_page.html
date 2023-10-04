@@ -1,6 +1,6 @@
-{% extends 'shared/index.html' %}
-{% load render_partial %}
-{% load sorl_thumbnail %}
+
+{% comment %} {% load render_partial %}
+{% load sorl_thumbnail %} {% endcomment %}
 {% block title %}
     مقالات 
 {% endblock %}
@@ -18,9 +18,9 @@
       <div class="col-lg-9">
             {% for articles in article %}
                     <div class="blog-item clearfix"> <div class="blog-item clearfix">
-                        {% thumbnail articles.image "1080x700" quality=100 crop="center"  as image %}
-                              <img src="{{ image.url }}" alt="blog-single" class="resp-img">
-                        {% endthumbnail %}
+                      
+                              <img src="{{ articles.image.url }}" alt="blog-single" class="resp-img">
+                        
                     </div>
           <h3>{{ articles.title }}</h3>
           <div class="author"> <a href="#"> {{ articles.selected_categories.all|join:" / " }}  </a><br> <span> {{articles.date }} - {{ articles.writer }}   </span> </div>
@@ -43,13 +43,25 @@
              <a class="next" href="?page={{ page_obj.next_page_number }}">بعدی<i class="zmdi zmdi-chevron-left"></i></a> </div>
            {% endif %}
       </div>
-      <div class="col-lg-3 blog-sidebar">
-        <div class="search-something">
-          <input type="search" placeholder="دنبال چه چیزی هستید؟">
-          <a href="#"><i class="zmdi zmdi-search"></i></a> </div>
+      
+        
         <h4>پست های اخیر</h4>
-          {% render_partial "apps.article_module.views.latest_articles_components" %}
-        {% render_partial 'apps.article_module.views.article_categories_component' %}
+        {% for latest_article in latest_articles %}
+        <div class="recent-post clearfix"> {{latest_article.image}}
+        <img src="{{ image.url }}" alt="recent" class="pull-left">
+        <a href="{% url "article:article-detail" latest_article.slug %}">{{ latest_article.title }}</a>
+        <div class="author"> <a href="">{{ latest_article.writer }}</a><span>{{ latest_article.date }}</span> </div>
+    {% endfor %}
+    </div>
+    <div class="categories">
+      <h6>دسته بندی ها</h6>
+      <ul>
+     {% for category in categories %}
+           <li><a href="{% url "article:article-list-by-category" category.title %}">{{ category }} ({{ category.aricle_count }})</a></li>
+     {% endfor %}
+
+      </ul>
+    </div>
       </div>
     </div>
   </div>

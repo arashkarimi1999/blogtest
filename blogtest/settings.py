@@ -42,6 +42,9 @@ INSTALLED_APPS = [
     'apps',
     'apps.user_module',
     'apps.article_module',
+    'apps.home_module'
+    # 'sorl.thumbnail',
+    
 
 ]
 
@@ -59,9 +62,7 @@ ROOT_URLCONF = 'blogtest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            BASE_DIR / "templates"
-        ],
+        
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

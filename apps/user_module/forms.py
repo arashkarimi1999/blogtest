@@ -6,26 +6,26 @@ from apps.user_module.models import User
 
 
 class RegisterForm(forms.Form):
-    email = forms.CharField(label="ایمیل",
+    email = forms.CharField(label="email",
                             widget=forms.TextInput(attrs={
                                 'class': "req",
-                                'placeholder': "ایمیل",
+                                'placeholder': "email",
                                 'name': 'email',
                                 'type': "email"
                             }))
     password = forms.CharField(
-        label='رمز عبور',
+        label='password ',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "رمـز عبـور",
+            'placeholder': "password ",
         }))
     confirm_password = forms.CharField(
-        label='تایید رمز عبور',
+        label='password confirmation',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "تایید رمـز عبـور",
+            'placeholder': "password confirmation",
         }))
 
     # def clean_username(self):
@@ -38,47 +38,47 @@ class RegisterForm(forms.Form):
 
 class LoginForm(forms.Form):
     email = forms.EmailField(
-        label='آدرس ایمیل',
+        label='email addres ',
         widget=forms.EmailInput(attrs={
             'class': 'login-form',
             'type': "email",
-            'placeholder': "آدرس ایمیل",
+            'placeholder': "email addres ",
 
         }))
     password = forms.CharField(
-        label='رمز عبور',
+        label='password  ',
         widget=forms.PasswordInput(attrs={
             'class': 'login-form',
             'type': "password",
-            'placeholder': "رمـز عبـور",
+            'placeholder': "password  ",
         }))
 
 
 class ForgetPassForm(forms.Form):
     email = forms.EmailField(
-        label='آدرس ایمیل',
+        label='email address  ',
         widget=forms.EmailInput(attrs={
             'class': 'login-form',
             'type': "email",
-            'placeholder': "آدرس ایمیل",
+            'placeholder': "email address  ",
 
         }))
 
 
 class ResetPasswordForm(forms.Form):
     password = forms.CharField(
-        label='رمز عبور',
+        label='password  ',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "رمـز عبـور",
+            'placeholder': "passwrod  ",
         }))
     confirm_password = forms.CharField(
-        label='تایید رمز عبور',
+        label='password confirmation',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "تایید رمـز عبـور",
+            'placeholder': " password confirmation ",
         }))
 
 class EditPanelForm(forms.ModelForm):
@@ -87,27 +87,27 @@ class EditPanelForm(forms.ModelForm):
         fields = ['first_name', 'last_name', 'username','number','avatar']
         username = forms.CharField(widget=forms.TextInput(attrs= {
             'class': "login-form",
-            'placeholder': "نام کاربری  ",
+            'placeholder': "username   ",
             'name': 'name',
             'type': "text"
         }))
         widgets = {
             'first_name': forms.TextInput( attrs={
                 'class': "req",
-                'placeholder': "نام  ",
+                'placeholder': "name  ",
                 'name': 'name',
                 'type': "text"
             }),
             'last_name': forms.TextInput(attrs={
                 'class': "req",
-                'placeholder': "نام خانوادگی  ",
+                'placeholder': "lastname   ",
                 'name': 'name',
                 'type': "text"
             }),
 
             'number': forms.NumberInput(attrs={
                 'class': "req",
-                'placeholder': "شماره همراه ",
+                'placeholder': "mobile phone  ",
                 'name': 'text',
                 'type': "text"
             }),
@@ -117,34 +117,34 @@ class EditPanelForm(forms.ModelForm):
 
         }
         labels = {
-            'first_name': 'نام ',
-            'last_name': ' نام خانوادگی',
-            'username': ' نام کاربری',
-            'number': 'شماره ی تلفن',
-            'avatar' : 'آواتار',
+            'first_name': ' first_name',
+            'last_name': ' last_name ',
+            'username': 'username',
+            'number': 'number',
+            'avatar' : 'avatar',
 
         }
 
 
 class EditPasswordForm(forms.Form):
     current_password = forms.CharField(
-        label='رمز عبور فعلی ',
+        label='current password ',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "رمـز عبـور فعلی ",
+            'placeholder': "current password",
         }))
     password = forms.CharField(
-        label='رمز عبور',
+        label='password ',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "رمـز عبـور",
+            'placeholder': "password ",
         }))
     confirm_password = forms.CharField(
-        label='تایید رمز عبور',
+        label='password confirmation',
         widget=forms.PasswordInput(attrs={
             'class': 'signup-form',
             'type': "password",
-            'placeholder': "تایید رمـز عبـور",
+            'placeholder': "password confirmations",
         }))

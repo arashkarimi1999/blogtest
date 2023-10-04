@@ -1,7 +1,7 @@
 
 
 {% block title %}
-    تغییر رمز عبور کاربری
+  change user password
 {% endblock %}
 
 {% block header_slider %}
@@ -17,10 +17,10 @@
         
     <div class="list-group list-group-light">
       <a href="{% url "user:user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
-      پنل کاربری</a>
-    <a href="{% url "user:edit-user-password" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">تغییر رمز عبور</a>
-    <a href="{% url "user:edit-user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">ویرایش اطلاعات کاربری</a>
-    <a href="#" class="list-group-item list-group-item-action px-3 border-0 ripple">سبد خرید</a>
+     user panel</a>
+    <a href="{% url "user:edit-user-password" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">change password </a>
+    <a href="{% url "user:edit-user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">edit user info   </a>
+   
     </div>
         </div>
                 <div class="container success">
@@ -29,7 +29,7 @@
         {% csrf_token %}
       <div class="row">
                 <div class="col-sm-8 ">
-                    <h4 >ویرایش رمز عبور </h4>
+                    <h4 > change password  </h4>
 
                              {% csrf_token %}
                             {{ edit_form }}
@@ -37,7 +37,7 @@
       <div class="row clearfix">
         <div class="col-sm-12">
           <div class="pull-right">
-            <button type="submit" name="submit" class="greybutton" >ویرایش</button>
+            <button type="submit" name="submit" class="greybutton" >change </button>
           </div>
         </div>
       </div>

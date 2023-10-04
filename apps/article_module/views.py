@@ -9,6 +9,7 @@ from .models import ArticleCategory, Article
 from ..user_module.models import User
 
 
+
 # from .forms import CommentForm
 
 # Create your views here.
@@ -16,7 +17,7 @@ from ..user_module.models import User
 
 class ArticlesView(ListView):
     template_name = 'article_module/articles_page.html'
-    paginate_by = 1
+    paginate_by = 10
     context_object_name = "article"
     model = Article
     ordering = "date"
