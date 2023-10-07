@@ -7,53 +7,51 @@ from apps.user_module.models import User
 
 class RegisterForm(forms.Form):
 
-    
-    
     first_name=forms.CharField(label="first_name",
-    widget=forms.TextInput(attrs={
-                                'class': "req",
-                                'placeholder': "firstname",
-                                'name': 'firstname',
-                                'type': "firstname"
-                            }))
+        widget=forms.TextInput(attrs={
+            'class': "form-control",
+            'placeholder': "firstname",
+            'name': 'firstname',
+            'type': "firstname"
+            }))
 
     last_name=forms.CharField(label="last_name",
-    widget=forms.TextInput(attrs={
-                                'class': "req",
-                                'placeholder': "lastname",
-                                'name': 'lastname',
-                                'type': "lastname"
-                            }))
+        widget=forms.TextInput(attrs={
+            'class': "form-control",
+            'placeholder': "lastname",
+            'name': 'lastname',
+            'type': "lastname"
+            }))
     
     phone_number=forms.CharField(label="phone_number",
-    widget=forms.TextInput(attrs={
-                                'class': "req",
-                                'placeholder': "phonenumber",
-                                'name': 'phonenumber',
-                                'type': "phonenumber"
-                            }))
+        widget=forms.TextInput(attrs={
+            'class': "form-control",
+            'placeholder': "phonenumber",
+            'name': 'phonenumber',
+            'type': "phonenumber"
+            }))
 
     email = forms.CharField(label="email",
-                            widget=forms.TextInput(attrs={
-                                'class': "req",
-                                'placeholder': "email",
-                                'name': 'email',
-                                'type': "email"
-                            }))
-    password = forms.CharField(
-        label='password ',
+        widget=forms.TextInput(attrs={
+            'class': "form-control",
+            'placeholder': "email",
+            'name': 'email',
+            'type': "email"
+            }))
+    
+    password = forms.CharField(label='password ',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
             'placeholder': "password ",
-        }))
-    confirm_password = forms.CharField(
-        label='password confirmation',
+            }))
+    
+    confirm_password = forms.CharField(label='password confirmation',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
             'placeholder': "password confirmation",
-        }))
+            }))
     
     # avatar=forms.FileField(label="avatar")
 
