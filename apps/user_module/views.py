@@ -1,5 +1,6 @@
 from django.contrib.auth import login, logout
 from django.http import Http404, HttpRequest,HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -96,10 +97,8 @@ class RegisterView(View):
                 send_mail("email verififcation code",f"http://127.0.0.1:8000/user-activation/{new_user.activation_code}",settings.EMAIL_HOST_USER,[new_user.email,])
                 new_user.save()
                 return redirect(reverse('user:login'))
-        context = {
-            "form": form
-        }
-        return render(request, 'user_module/register_form.html', context)
+            
+        return render(request, 'user_module/register_form.html', {"form": form})
 
 
 class UserActivateView(View):
@@ -116,41 +115,36 @@ class UserActivateView(View):
 
 
 class LoginView(View):
-    def get(self, request):
-        login_form = LoginForm()
-        context = {
-            'login_form': login_form
-        }
+    form_class = LoginForm
+    template_name = 'user_module/login_form.html'
 
-        return render(request, 'user_module/login_form.html', context)
+    def get(self, request):
+        form = self.form_class
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request: HttpRequest):
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
-            user_email = login_form.cleaned_data.get('email')
-            user_pass = login_form.cleaned_data.get('password')
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data.get('email')
+            user_pass = form.cleaned_data.get('password')
             user: User = User.objects.filter(email__iexact=user_email).first()
             if user is not None:
                 if not user.is_active:
-                    login_form.add_error('email', 'user is not activated  ')
+                    form.add_error('email', 'user is not activated  ')
                 else:
                     is_password_correct = user.check_password(user_pass)
                     if is_password_correct:
                         login(request, user)
                         return redirect(reverse("home:home_page"))
                     else:
-                        login_form.add_error('email', 'wrong password ')
+                        form.add_error('email', 'wrong password ')
             else:
-                login_form.add_error('email', 'user not found ')
+                form.add_error('email', 'user not found ')
 
-        context = {
-            'login_form': login_form
-        }
-
-        return render(request, 'user_module/login_form.html', context)
+        return render(request, self.template_name, {'form': form})
 
 
-class LogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
     def get(self,request):
         logout(request)
         return redirect(reverse("home:home_page"))

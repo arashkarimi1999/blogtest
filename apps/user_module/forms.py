@@ -7,7 +7,8 @@ from apps.user_module.models import User
 
 class RegisterForm(forms.Form):
 
-    first_name=forms.CharField(label="first_name",
+    first_name=forms.CharField(
+        label="first_name",
         widget=forms.TextInput(attrs={
             'class': "form-control",
             'placeholder': "firstname",
@@ -15,7 +16,8 @@ class RegisterForm(forms.Form):
             'type': "firstname"
             }))
 
-    last_name=forms.CharField(label="last_name",
+    last_name=forms.CharField(
+        label="last_name",
         widget=forms.TextInput(attrs={
             'class': "form-control",
             'placeholder': "lastname",
@@ -23,7 +25,8 @@ class RegisterForm(forms.Form):
             'type': "lastname"
             }))
     
-    phone_number=forms.CharField(label="phone_number",
+    phone_number=forms.CharField(
+        label="phone_number",
         widget=forms.TextInput(attrs={
             'class': "form-control",
             'placeholder': "phonenumber",
@@ -31,7 +34,8 @@ class RegisterForm(forms.Form):
             'type': "phonenumber"
             }))
 
-    email = forms.CharField(label="email",
+    email = forms.CharField(
+        label="email",
         widget=forms.TextInput(attrs={
             'class': "form-control",
             'placeholder': "email",
@@ -39,14 +43,16 @@ class RegisterForm(forms.Form):
             'type': "email"
             }))
     
-    password = forms.CharField(label='password ',
+    password = forms.CharField(
+        label='password ',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'type': "password",
             'placeholder': "password ",
             }))
     
-    confirm_password = forms.CharField(label='password confirmation',
+    confirm_password = forms.CharField(
+        label='password confirmation',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'type': "password",
@@ -65,18 +71,20 @@ class RegisterForm(forms.Form):
 
 
 class LoginForm(forms.Form):
+    
     email = forms.EmailField(
         label='email addres ',
         widget=forms.EmailInput(attrs={
-            'class': 'login-form',
+            'class': 'form-control',
             'type': "email",
             'placeholder': "email addres ",
 
         }))
+    
     password = forms.CharField(
         label='password  ',
         widget=forms.PasswordInput(attrs={
-            'class': 'login-form',
+            'class': 'form-control',
             'type': "password",
             'placeholder': "password  ",
         }))
