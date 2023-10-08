@@ -3,44 +3,14 @@
 {% block content %}
     <h2>Login User</h2>
 
-    <form action="" method="post" class="col-md-6" novalidate>
+    <form action="" method="post" class="col-md-6 mx-auto" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="Login">
     </form>
 
-{% endblock %}
-
-<!-- {% block title %}
-    register
-{% endblock %}
-
-{% block body %}
-    <body id="contact" class="page">
-<div class="page-heading text-center">
-    <div class="container">
-      <h2> login  </h2>
+    <div class="text-center mx-auto col-md-2">
+        <a href="{% url 'user:forget_password' %}" class="list-group-item list-group-item-action">Forget Password</a>
     </div>
-  </div>
-  <div class="container success">
 
-    <form method="post" class="contact">
-        {% csrf_token %}
-      <div class="row">
-                <div class="col-sm-6 col-md-offset-3">
-                    <h4 > login</h4>
-						<form method="post" action="{% url 'user:login' %}" >
-                             {% csrf_token %}
-                            {{ login_form }}
-    <p><a href="{% url "user:forget_password" %}">forget_password</a></p>
-      <div class="row clearfix">
-        <div class="col-sm-12">
-          <div class="pull-right">
-            <button type="submit" name="submit" class="greybutton" >login </button>
-          </div>
-        </div>
-      </div>
-    </form>
-  </div>
-      </div></form></div>
-{% endblock %} -->
+{% endblock %}
