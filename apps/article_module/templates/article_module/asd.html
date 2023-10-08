@@ -1,0 +1,31 @@
+{% block title %}
+    create articles  
+{% endblock %}
+
+{% block body %}
+
+
+    <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {{ form.text}}
+    <button type="submit">Submit</button>
+    </form>
+    
+    
+    
+    <html>
+    <head>
+        <title>Send Text as URL Parameter</title>
+    </head>
+    <body>
+        <form action="example.com/your-endpoint" method="get">
+            <label for="text">Enter text:</label>
+            <input type="text" id="text" name="my_param" placeholder="Type something...">
+            <button type="submit">Submit</button>
+        </form>
+    </body>
+    </html>
+    
+
+{% endblock %}
