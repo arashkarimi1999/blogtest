@@ -2,12 +2,15 @@ from django.db.models import Count
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
 from django.template.loader import render_to_string
-from django.views.generic import DetailView
+from django.views.generic import DetailView,UpdateView
 from django.views.generic.list import ListView
 from django.views.generic import CreateView
 from .models import ArticleCategory, Article, ArticleComments
-from .forms import CreateArticleForm,CommentForm
+from .forms import CreateArticleForm,CommentForm,ArticleEditForm
 from django.contrib.auth.mixins import UserPassesTestMixin,LoginRequiredMixin
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+
 
 
 # Create your views here.
@@ -105,3 +108,29 @@ class CreateArticle(UserPassesTestMixin,CreateView):
 
     def test_func(self):
         return is_superuser_or_admin(self.request.user)
+
+
+def UserArticles(request):
+    if request.method=="GET":
+        if request.user.is_authenticated:
+            user_articles=Article.objects.filter(author=request.user)
+            print(user_articles)
+
+            return render(request,"article_module/user_article.html",  {'articles': user_articles} )
+
+
+
+
+class ArticleUpdateView(LoginRequiredMixin,UpdateView):
+    model = Article
+    form_class = ArticleEditForm
+    template_name = 'article_module/update_article.html'
+    success_url = '/user-articles'
+
+
+
+@login_required
+def delete_article(request, article_id):
+    article = get_object_or_404(Article, pk=article_id)
+    article.delete()
+    return redirect('article:user-articles')  
