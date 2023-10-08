@@ -14,7 +14,7 @@ class RegisterForm(forms.Form):
             'placeholder': "firstname",
             'name': 'firstname',
             'type': "firstname"
-            }))
+        }))
 
     last_name=forms.CharField(
         label="last_name",
@@ -23,7 +23,7 @@ class RegisterForm(forms.Form):
             'placeholder': "lastname",
             'name': 'lastname',
             'type': "lastname"
-            }))
+        }))
     
     phone_number=forms.CharField(
         label="phone_number",
@@ -32,7 +32,7 @@ class RegisterForm(forms.Form):
             'placeholder': "phonenumber",
             'name': 'phonenumber',
             'type': "phonenumber"
-            }))
+        }))
 
     email = forms.CharField(
         label="email",
@@ -41,7 +41,7 @@ class RegisterForm(forms.Form):
             'placeholder': "email",
             'name': 'email',
             'type': "email"
-            }))
+        }))
     
     password = forms.CharField(
         label='password ',
@@ -49,7 +49,7 @@ class RegisterForm(forms.Form):
             'class': 'form-control',
             'type': "password",
             'placeholder': "password ",
-            }))
+        }))
     
     confirm_password = forms.CharField(
         label='password confirmation',
@@ -57,7 +57,7 @@ class RegisterForm(forms.Form):
             'class': 'form-control',
             'type': "password",
             'placeholder': "password confirmation",
-            }))
+        }))
     
     # avatar=forms.FileField(label="avatar")
 
@@ -77,8 +77,7 @@ class LoginForm(forms.Form):
         widget=forms.EmailInput(attrs={
             'class': 'form-control',
             'type': "email",
-            'placeholder': "email addres ",
-
+            'placeholder': "email address",
         }))
     
     password = forms.CharField(
@@ -86,38 +85,42 @@ class LoginForm(forms.Form):
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'type': "password",
-            'placeholder': "password  ",
+            'placeholder': "password",
         }))
 
 
 class ForgetPassForm(forms.Form):
+
     email = forms.EmailField(
         label='email address  ',
         widget=forms.EmailInput(attrs={
-            'class': 'login-form',
+            'class': 'form-control',
             'type': "email",
-            'placeholder': "email address  ",
-
+            'placeholder': "email address",
         }))
 
 
 class ResetPasswordForm(forms.Form):
+
     password = forms.CharField(
-        label='password  ',
+        label='password',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
-            'placeholder': "passwrod  ",
+            'placeholder': "passwrod",
         }))
+    
     confirm_password = forms.CharField(
         label='password confirmation',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
-            'placeholder': " password confirmation ",
+            'placeholder': " password confirmation",
         }))
 
+
 class EditPanelForm(forms.ModelForm):
+
     class Meta:
         model = User
         fields = ['first_name', 'last_name', 'username','number','avatar']
@@ -158,24 +161,28 @@ class EditPanelForm(forms.ModelForm):
 
 
 class EditPasswordForm(forms.Form):
+
     current_password = forms.CharField(
         label='current password ',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
             'placeholder': "current password",
         }))
+    
     password = forms.CharField(
-        label='password ',
+        label='password',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
-            'placeholder': "password ",
+            'placeholder': "password",
         }))
+
+
     confirm_password = forms.CharField(
         label='password confirmation',
         widget=forms.PasswordInput(attrs={
-            'class': 'signup-form',
+            'class': 'form-control',
             'type': "password",
-            'placeholder': "password confirmations",
+            'placeholder': "password confirmation",
         }))

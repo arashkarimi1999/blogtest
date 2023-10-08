@@ -46,29 +46,31 @@ class EditUserPanelView(View):
 
 
 class EditUserPasswordView(View):
+    form_class = EditPasswordForm
+    template_name = 'user_module/user-pass-edit.html'
     def get(self,request):
-        edit_form = EditPasswordForm()
+        form = self.form_class()
         current_user : User = User.objects.filter(id = request.user.id).first()
-        context = {
-            "current_user" : current_user ,
-            "edit_form" : edit_form
-        }
-        return render(request, 'user_module/user-pass-edit.html' , context)
+        # context = {
+        #     "current_user" : current_user,
+        #     "edit_form" : edit_form
+        # }
+        return render(request, self.template_name, {'form': form})
 
     def post(self,request):
-        edit_form = EditPasswordForm(request.POST)
+        form = self.form_class(request.POST)
         current_user: User = User.objects.filter(id=request.user.id).first()
-        context = {
-            "current_user": current_user,
-            "edit_form": edit_form }
-        if edit_form.is_valid():
-            if current_user.check_password(edit_form.cleaned_data.get("current_password")):
-                current_user.set_password(edit_form.cleaned_data.get("password"))
+        # context = {
+        #     "current_user": current_user,
+        #     "edit_form": edit_form }
+        if form.is_valid():
+            if current_user.check_password(form.cleaned_data.get("current_password")):
+                current_user.set_password(form.cleaned_data.get("password"))
                 current_user.save()
                 return redirect(reverse("user:login"))
             else :
-                edit_form.add_error("current_password" , 'password is incorrect ')
-        return render(request, 'user_module/user-pass-edit.html', context)
+                form.add_error("current_password" , 'password is incorrect ')
+        return render(request, 'user_module/user-pass-edit.html', {'form': form})
     
 
 class RegisterView(View):
@@ -134,16 +136,16 @@ class LoginView(View):
             user: User = User.objects.filter(email__iexact=user_email).first()
             if user is not None:
                 if not user.is_active:
-                    form.add_error('email', 'user is not activated  ')
+                    form.add_error('email', 'user is not activated, please check your email')
                 else:
                     is_password_correct = user.check_password(user_pass)
                     if is_password_correct:
                         login(request, user)
                         return redirect(reverse("home:home_page"))
                     else:
-                        form.add_error('email', 'wrong password ')
+                        form.add_error('email', 'wrong password')
             else:
-                form.add_error('email', 'user not found ')
+                form.add_error('email', 'user not found')
 
         return render(request, self.template_name, {'form': form})
 

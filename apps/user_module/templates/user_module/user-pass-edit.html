@@ -1,46 +1,15 @@
+{% extends 'base.html' %}
 
+{% block content %}
 
-{% block title %}
-  change user password
-{% endblock %}
-
-{% block header_slider %}
-<body id="contact" class="page">
-{% endblock %}
-{% block body %}
-    <div class="container success ">
-                <div class="row">
-        <div class="col-md-4">
-            <a href="" class="thumbnail">
-                <img src="{{ user.avatar.url }}" alt="">
-            </a>
-        
-    <div class="list-group list-group-light">
-      <a href="{% url "user:user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
-     user panel</a>
-    <a href="{% url "user:edit-user-password" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">change password </a>
-    <a href="{% url "user:edit-user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">edit user info   </a>
-   
-    </div>
-        </div>
-                <div class="container success">
-
-    <form method="post" action="{%  url "user:edit-user-password" %}" class="contact">
+    <h2 class="text-center">change password</h2>
+    <form method="post" action="{%  url "user:edit-user-password" %}" class="col-md-6 mx-auto">
         {% csrf_token %}
-      <div class="row">
-                <div class="col-sm-8 ">
-                    <h4 > change password  </h4>
+        {{ form.as_p }}
+        <input type="submit" value="Change Password">
+    </form>
 
-                             {% csrf_token %}
-                            {{ edit_form }}
-
-      <div class="row clearfix">
-        <div class="col-sm-12">
-          <div class="pull-right">
-            <button type="submit" name="submit" class="greybutton" >change </button>
-          </div>
-        </div>
-      </div>
-                </div>
-  </div>
+    <div class="text-center mx-auto col-md-2">
+        <a href="{% url 'user:forget_password' %}" class="list-group-item list-group-item-action">Forget Password</a>
+    </div>
 {% endblock %}
