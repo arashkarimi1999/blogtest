@@ -31,7 +31,7 @@ article detail
     <div class="row">
       <div class="col-lg-9">  <img src="{{ article.image.url }}" alt="blog-single" class="resp-img" data-article-id="{{ article.id }}">
         <h3>{{ article.title }}</h3>
-        <div class="author">  <a href="#"> {{ article.writer  }} </a><span>  {{ article.date }}  </span> </div>
+        <div class="author">  <a href="#"> {{ article.writer  }} </a><span>  {{ article.date_created }}  </span> </div>
             <p>{{ article.text }}</p>
           <div class="about-author">
           <h4>about writer  </h4>
@@ -94,9 +94,7 @@ article detail
                                  <img class="media-object" src="{{ image.url }}">
                                   
                           {% else %}
-                <a class="pull-right" href="#">
-                    <img class="media-object" src="/static/images/blog/Customer.jpg" alt="">
-                  </a>
+                
   
                           {% endif %}
                   </a>
@@ -104,7 +102,7 @@ article detail
                     <ul class="sinlge-post-meta">
                       <li><i class="en en-user"></i>{{ answer.author.get_full_name }}</li>
                       {% comment %} <li><i class="en en-clock-o"></i> 13:33 ب.ظ</li> {% endcomment %}
-                      <li><i class="en en-calendar"></i>{{ article.date_created }}</li>
+                      <li><i class="en en-calendar"></i>{{ answer.date_created }}</li>
                     </ul>
                     <p>{{ answer.text }}</p>
   
@@ -127,8 +125,7 @@ article detail
                           <input type="text" id="text" name="article_comment" placeholder="Type something...">
                           
                           <!-- Additional parameters -->
-                          <p>
-                            {{article.id}} {{comment.id}}
+                          
                           
                           <input type="hidden" name="article_id" value="{{article.id}}">
                           <input type="hidden" name="parent_id" value="{{comment.id}}">

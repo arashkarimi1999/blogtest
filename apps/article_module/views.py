@@ -65,11 +65,12 @@ def add_article_comment(request:HttpRequest):
         context = {
             'comments': ArticleComments.objects.filter(article_id=article_id, parent=None).order_by(
                 '-date_created'),
-            'comments_count': ArticleComments.objects.filter(article_id=article_id).count()
+            'comments_count': ArticleComments.objects.filter(article_id=article_id).count(),
+            'article': Article.objects.get(id=article_id),
             
         }
-        return HttpResponse("hello world ")
-        # return  (request,'article_module/article-detail.html' , context)
+        # return HttpResponse("hello world ")
+        return  render (request,'article_module/article-detail.html',context )
         # return JsonResponse({
         # 'status' : 'success' ,
         # 'response' : data
