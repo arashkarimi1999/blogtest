@@ -1,33 +1,17 @@
+{% extends 'base.html' %}
 
-{% block title %}
-User Panel
-{% endblock %}
-{% block header_slider %}
-    <body id="contact" class="page">
-{% endblock %}
-{% block body %}
-{% if request.user.is_authenticated %}
-   <div class="container success ">
-                <div class="row">
-        <div class="col-md-4">
-            <a href="" class="thumbnail">
-                <img src="{{ user.avatar.url }}" alt="">
-            </a>
+{% block content %}
+
+    {% if request.user.is_authenticated %}
+    <h2 class="text-center">{{ user.first_name.title }} {{ user.last_name.title }}</h2>
+    <a href="{% url 'user:user-panel' %}" class="list-group-item list-group-item-action px-3 border-0 ripple" aria-current="true">user panel</a>
+    <a href="{% url 'user:edit-user-password' %}" class="list-group-item list-group-item-action px-3 border-0 ripple">change password</a>
+    <a href="{% url 'user:edit-user-panel' %}" class="list-group-item list-group-item-action px-3 border-0 ripple">edit user info</a>
         
-            <div class="list-group list-group-light">
-               <a href="{% url "user:user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
-            user panel</a>
-              <a href="{% url "user:edit-user-password" %}" class="list-group-item list-group-item-action px-3 border-0 ripple"> change password </a>
-              <a href="{% url "user:edit-user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">edit user info   </a>
-              
-            </div>
-        </div></div></div>
-        {% else %}
-        <div>
-            <h1>Please login first</h1>
-            <a href="{% url 'user:login' %}" class="blueplay login">login</a>
-            <a href="{% url "user:register" %}" class="register">signup</a>
-        </div>
-        
-        {% endif %}
+    {% else %}
+    <div>
+        <h1>Please login first</h1>
+    </div>
+    {% endif %}
+
 {% endblock %}

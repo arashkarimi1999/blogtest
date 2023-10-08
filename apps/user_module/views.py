@@ -16,6 +16,7 @@ from apps.user_module.models import User
 class UserPanelView(TemplateView):
     template_name = "user_module/user-panel.html"
 
+
 def user_panel_components(request):
     return  render(request,"user_module/user-components/user-panel-component.html",context={})
 
@@ -43,6 +44,7 @@ class EditUserPanelView(View):
         }
         return render(request, "user_module/edit-user-panel.html", context)
 
+
 class EditUserPasswordView(View):
     def get(self,request):
         edit_form = EditPasswordForm()
@@ -67,6 +69,8 @@ class EditUserPasswordView(View):
             else :
                 edit_form.add_error("current_password" , 'password is incorrect ')
         return render(request, 'user_module/user-pass-edit.html', context)
+    
+
 class RegisterView(View):
     form_class = RegisterForm
     template_name = 'user_module/register_form.html'
@@ -171,7 +175,6 @@ class ForgetPasswordView(View):
             "forget_form": forget_pass_form
         }
         return render(request, "user_module/forget_password.html", context)
-
 
 
 class ResetPasswordView(View):
