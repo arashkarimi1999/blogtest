@@ -18,7 +18,7 @@ urlpatterns = [
     path('logout', views.LogoutView.as_view(), name='logout'),
     path('reset_password/<str:activation_code>',views.ResetPasswordView.as_view(),name= "reset-password"),
     path('user-activation/<str:activation_code>',views.UserActivateView.as_view(),name= "user_activation"),
-    path('test-email',views.test_email)
+    # path('test-email',views.test_email)
 
 
     ]

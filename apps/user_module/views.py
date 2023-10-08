@@ -1,22 +1,21 @@
 from django.contrib.auth import login, logout
 from django.http import Http404, HttpRequest,HttpResponse
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.views.generic import CreateView
 from django.views.generic.base import View, TemplateView
-from utils.email_service import send_mail
+from django.conf import settings
+from django.core.mail import send_mail
 from apps.user_module.forms import RegisterForm, LoginForm, ForgetPassForm, ResetPasswordForm, EditPanelForm, \
     EditPasswordForm
 from apps.user_module.models import User
-from utils.email_service import SendMail
-
-
-# Create your views here.
 
 
 class UserPanelView(TemplateView):
     template_name = "user_module/user-panel.html"
+
 
 def user_panel_components(request):
     return  render(request,"user_module/user-components/user-panel-component.html",context={})
@@ -45,6 +44,7 @@ class EditUserPanelView(View):
         }
         return render(request, "user_module/edit-user-panel.html", context)
 
+
 class EditUserPasswordView(View):
     def get(self,request):
         edit_form = EditPasswordForm()
@@ -69,18 +69,18 @@ class EditUserPasswordView(View):
             else :
                 edit_form.add_error("current_password" , 'password is incorrect ')
         return render(request, 'user_module/user-pass-edit.html', context)
+    
+
 class RegisterView(View):
+    form_class = RegisterForm
+    template_name = 'user_module/register_form.html'
 
     def get(self, request):
-        register_form = RegisterForm()
-        login_form = LoginForm()
-        context = {
-            "register_form": register_form
-        }
-        return render(request, 'user_module/register_form.html', context)
+        form = self.form_class()
+        return render(request, self.template_name, {'form':form})
 
     def post(self, request):
-        form = RegisterForm(request.POST)
+        form = self.form_class(request.POST)
         if form.is_valid():
             email_user = form.cleaned_data.get("email")
             password = form.cleaned_data.get("password")
@@ -89,20 +89,20 @@ class RegisterView(View):
             if user:
                 form.add_error("email", 'user with this information is already exists ')
             else:
-                new_user = User(email=email_user, activation_code=get_random_string(5), is_active=False,
+                new_user = User(email=email_user,
+                                activation_code=get_random_string(5),
+                                is_active=False,
                                 username=email_user,
                                 first_name=form.cleaned_data.get("first_name"),
                                 last_name=form.cleaned_data.get("last_name"),
                                 number=form.cleaned_data.get("phone_number"))
 
                 new_user.set_password(password)
+                send_mail("email verififcation code",f"http://127.0.0.1:8000/user-activation/{new_user.activation_code}",settings.EMAIL_HOST_USER,[new_user.email,])
                 new_user.save()
-                send_mail("email verififcation code",{"user" : user},"user_module/email/activate_mail.html",new_user.email,)
                 return redirect(reverse('user:login'))
-        context = {
-            "register_form": form
-        }
-        return render(request, 'user_module/register_form.html', context)
+            
+        return render(request, 'user_module/register_form.html', {"form": form})
 
 
 class UserActivateView(View):
@@ -119,41 +119,36 @@ class UserActivateView(View):
 
 
 class LoginView(View):
-    def get(self, request):
-        login_form = LoginForm()
-        context = {
-            'login_form': login_form
-        }
+    form_class = LoginForm
+    template_name = 'user_module/login_form.html'
 
-        return render(request, 'user_module/login_form.html', context)
+    def get(self, request):
+        form = self.form_class
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request: HttpRequest):
-        login_form = LoginForm(request.POST)
-        if login_form.is_valid():
-            user_email = login_form.cleaned_data.get('email')
-            user_pass = login_form.cleaned_data.get('password')
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            user_email = form.cleaned_data.get('email')
+            user_pass = form.cleaned_data.get('password')
             user: User = User.objects.filter(email__iexact=user_email).first()
             if user is not None:
                 if not user.is_active:
-                    login_form.add_error('email', 'user is not activated  ')
+                    form.add_error('email', 'user is not activated  ')
                 else:
                     is_password_correct = user.check_password(user_pass)
                     if is_password_correct:
                         login(request, user)
                         return redirect(reverse("home:home_page"))
                     else:
-                        login_form.add_error('email', 'wrong password ')
+                        form.add_error('email', 'wrong password ')
             else:
-                login_form.add_error('email', 'user not found ')
+                form.add_error('email', 'user not found ')
 
-        context = {
-            'login_form': login_form
-        }
-
-        return render(request, 'user_module/login_form.html', context)
+        return render(request, self.template_name, {'form': form})
 
 
-class LogoutView(View):
+class LogoutView(LoginRequiredMixin, View):
     def get(self,request):
         logout(request)
         return redirect(reverse("home:home_page"))
@@ -180,7 +175,6 @@ class ForgetPasswordView(View):
             "forget_form": forget_pass_form
         }
         return render(request, "user_module/forget_password.html", context)
-
 
 
 class ResetPasswordView(View):
@@ -216,9 +210,3 @@ class ResetPasswordView(View):
         }
 
         return render(request, 'user_module/reset_password.html', context)
-
-def test_email(request):
-
-    SendMail() 
-
-    return HttpResponse("hello world ")
