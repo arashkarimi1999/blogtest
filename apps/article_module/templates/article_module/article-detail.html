@@ -7,7 +7,21 @@ article detail
 {% block body %}
 
 <body id="blog-1" class="page">
-<main>
+
+  <style>
+    .div1 {
+        
+        padding: 10px;
+    }
+
+    .div2 {
+        margin-left: 20px; /* Adjust the margin to control the indentation */
+        
+        padding: 10px;
+    }
+</style>
+
+
   <div class="page-heading text-center">
     <div class="container">
       <h2>{{ article.title }}</h2>
@@ -15,9 +29,9 @@ article detail
   </div>
   <div class="container">
     <div class="row">
-      <div class="col-lg-9"> <img src="{{ article.image.url }}" alt="blog-single" class="resp-img">
+      <div class="col-lg-9">  <img src="{{ article.image.url }}" alt="blog-single" class="resp-img" data-article-id="{{ article.id }}">
         <h3>{{ article.title }}</h3>
-        <div class="author"> <a href="#"> {{ article.writer  }} </a><span>  {{ article.date }}  </span> </div>
+        <div class="author">  <a href="#"> {{ article.writer  }} </a><span>  {{ article.date }}  </span> </div>
             <p>{{ article.text }}</p>
           <div class="about-author">
           <h4>about writer  </h4>
@@ -32,40 +46,106 @@ article detail
 
 
         </div>
-{#        <h4>نظرات</h4>#}
-{#      #}
-{#        <h4>ارسال دیدگاه</h4>#}
-{#        #}
-{#<!--          <div class="container success">-->#}
-{#<!--         <form method="post" class="contact">-->#}
-{#<!--        {% csrf_token %}-->#}
-{#<!--      <div class="row">-->#}
-{#<!--        <div class="col-sm-4">-->#}
-{#<!--            {{ form.full_name.label_tag }}-->#}
-{#<!--            {{ form.full_name }}-->#}
-{#<!--            {{ form.full_name.errors }}-->#}
-{#<!--        </div>-->#}
-{#<!--        <div class="col-sm-4">-->#}
-{#<!--            {{ form.email.label_tag }}-->#}
-{#<!--            {{ form.email }}-->#}
-{#<!--            {{ form.email.errors }}-->#}
-{#<!--        </div>-->#}
-{#<!--      </div>-->#}
-{#<!--        <div class="col-md-8 pull-left ">-->#}
-{#<!--            {{ form.message.label_tag }}-->#}
-{#<!--            {{ form.message }}-->#}
-{#<!--            {{ form.message.errors }}-->#}
-{#<!--      </div>-->#}
-{#<!--      <div class="row clearfix">-->#}
-{#<!--        <div class="col-md-12">-->#}
-{##}
-{#<!--            <button type="submit" name="submit" class="greybutton">ارسال</button>-->#}
-{#<!--        </div>-->#}
-{#<!--      </div></form>-->#}
-{#<!--        </div>-->#}
-{#<!--      </div>-->#}
-    </form>
-      </div>
+
+        
+
+  
+  <h2>comments  ({{ comment_count }})</h2>
+              <ul class="media-list">
+                {% for comment in comments %}
+                <li class="media">
+                <div class="div1" id="comment_section">
+
+                    <a class="pull-right" href="#">
+                        {{ article.author.avatar }}
+                        <img src="{{ image.url }}">
+                    </a>
+                    <div class="media-body">
+                        <ul class="sinlge-post-meta">
+                            <li><i class="en en-user"></i>{{ comment.author.get_full_name }}</li>
+                            <li><i class="en en-calendar"></i>{{ comment.date_created }}</li>
+                        </ul> 
+                        <div class="comment" data-comment-id="{{ comment.id }}">
+                            <p>{{ comment.text }}</p>
+                            <form action="articles-comment" method="get">
+                              {% csrf_token %}
+                              <label for="text">reply:</label>
+                              <input type="text" id="text" name="article_comment" placeholder="Type something...">
+                              
+                              <!-- Additional parameters -->
+                              
+                              <input type="hidden" name="article_id" value="{{article.id}}">
+                              <input type="hidden" name="parent_id" value="{{comment.id}}">
+                      
+                              <button type="submit">send</button>
+                          </form>
+                            <div class="response"></div>
+                        </div>                      </li>
+                    </div>
+                  </div>
+
+                    </div>
+                      <div class="div2">
+                      {% for answer in comment.parent_comment.all %}
+                                        <li class="media second-media">
+                                          {% if answer.author.avatar %}
+                  <a class="pull-right" href="#">
+                          {{ answer.author.avatar }}
+                                 <img class="media-object" src="{{ image.url }}">
+                                  
+                          {% else %}
+                <a class="pull-right" href="#">
+                    <img class="media-object" src="/static/images/blog/Customer.jpg" alt="">
+                  </a>
+  
+                          {% endif %}
+                  </a>
+                  <div class="media-body">
+                    <ul class="sinlge-post-meta">
+                      <li><i class="en en-user"></i>{{ answer.author.get_full_name }}</li>
+                      {% comment %} <li><i class="en en-clock-o"></i> 13:33 ب.ظ</li> {% endcomment %}
+                      <li><i class="en en-calendar"></i>{{ article.date_created }}</li>
+                    </ul>
+                    <p>{{ answer.text }}</p>
+  
+                  </div>
+                </li>
+                        
+                {% endfor %}{% endfor %}
+  
+              </ul>
+  
+            </div>
+        <div class="replay-box">
+
+
+                    <div class="col-sm-12"><div class="row">{% if request.user.is_authenticated %}
+                        <h2>write your comment </h2>
+                        <form action="articles-comment" method="get">
+                          {% csrf_token %}
+                          <label for="text">comment:</label>
+                          <input type="text" id="text" name="article_comment" placeholder="Type something...">
+                          
+                          <!-- Additional parameters -->
+                          <p>
+                            {{article.id}} {{comment.id}}
+                          
+                          <input type="hidden" name="article_id" value="{{article.id}}">
+                          <input type="hidden" name="parent_id" value="{{comment.id}}">
+                  
+                          <button type="submit">send</button>
+                      </form>
+                    </div>
+                </div>
+                </div>{% else %}
+                  <div class="alert alert-warning">
+                   for add comment you have to  <a href="{% url 'user:login' %}">login</a> first {% endif %}
+
+
+
+        </div><!--/Repaly Box-->
+    </div>
+</div>
 
         <h4>last post</h4>
         {% for latest_article in latest_articles %}
@@ -85,8 +165,16 @@ article detail
      {% endfor %}
 
       </ul>
+
+
+    </div>
+  </div>
+
+
+
+</div>
     
-</main>
+
 
 </body>
 {% endblock %}

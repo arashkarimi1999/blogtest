@@ -55,7 +55,7 @@ class RegisterForm(forms.Form):
             'placeholder': "password confirmation",
         }))
     
-    avatar=forms.FileField(label="avatar")
+    # avatar=forms.FileField(label="avatar")
 
 
     # def clean_username(self):

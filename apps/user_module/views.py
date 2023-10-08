@@ -1,5 +1,5 @@
 from django.contrib.auth import login, logout
-from django.http import Http404, HttpRequest
+from django.http import Http404, HttpRequest,HttpResponse
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -9,6 +9,7 @@ from utils.email_service import send_mail
 from apps.user_module.forms import RegisterForm, LoginForm, ForgetPassForm, ResetPasswordForm, EditPanelForm, \
     EditPasswordForm
 from apps.user_module.models import User
+from utils.email_service import SendMail
 
 
 # Create your views here.
@@ -215,3 +216,9 @@ class ResetPasswordView(View):
         }
 
         return render(request, 'user_module/reset_password.html', context)
+
+def test_email(request):
+
+    SendMail() 
+
+    return HttpResponse("hello world ")
