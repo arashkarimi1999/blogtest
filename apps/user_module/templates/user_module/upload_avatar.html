@@ -1,0 +1,12 @@
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    
+    {{form}}
+    <button type="submit">Upload Avatar</button>
+
+    
+</form>
+
+<a href="{% url "user:user-panel" %}">   
+    <p> back to user panel  </p>
+</a>

@@ -4,15 +4,22 @@ from django.db import models
 # from sorl.thumbnail import ImageField, get_thumbnail
 from PIL import Image
 
+
+class Avatar(models.Model):
+    user = models.ForeignKey("User",on_delete=models.CASCADE,related_name="user",default=0)
+    avatar = models.ImageField(verbose_name="avatar gallery ",blank=True,null=True,upload_to="User-avatar")
+
 # Create your models here.
+
 class User(AbstractUser):
     activation_code = models.CharField(max_length=200, verbose_name='email-code verification')
     about = models.TextField(verbose_name="about user",null=True,blank=True)
 
     number =  models.IntegerField(blank=True,null=True,verbose_name="mobile-phone")
 
-    # talent=models.ManyToManyField(TalentCategory,blank=False,verbose_name="مهارت یا دسته بندی مورد علاقه ")
-    avatar = models.ImageField(verbose_name='avatar',null=True,blank=True,upload_to="User-avatar",)
+    
+    # avatars = models.ManyToManyField('Avatar', blank=True)
+
     
 
     class Meta:
