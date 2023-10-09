@@ -26,6 +26,9 @@ class ArticlesView(ListView):
 
     def get_context_data(self,*args , **kwargs):
         context = super(ArticlesView, self).get_context_data(*args, **kwargs)
+        categories=ArticleCategory.objects.all()
+        context["categories"]=categories
+        print(context)
         return context
 
     def get_queryset(self):
@@ -33,9 +36,10 @@ class ArticlesView(ListView):
         query = query.filter(is_active=True)
         this_category = self.kwargs.get('category')
         if this_category is not None :
-            query = query.filter(selected_categories__url__iexact=this_category)
-        return query
+            active_article=Article.objects.filter(is_active=True)
+            query = active_article.filter(selected_categories__title=this_category)
 
+        return query
 
 class ArticleDetailView(DetailView):
     template_name = "article_module/article-detail.html"
@@ -49,12 +53,6 @@ class ArticleDetailView(DetailView):
         context['comments'] = comment
         context['comment_count'] = ArticleComments.objects.annotate(comment_count=Count('article')).filter(article_id=article.id).count()
         return context
-# def category_components(request):
-#     main_categories = ArticleCategory.objects.prefetch_related('articlecategory_set').filter(is_active=True,parent = None)
-#     context = {
-#         "main_categories" : main_categories
-#     }
-#     return render(request, "article_module/components/category_components.html", context)
 
 def add_article_comment(request:HttpRequest):
     if request.user.is_authenticated:
@@ -72,12 +70,9 @@ def add_article_comment(request:HttpRequest):
             'article': Article.objects.get(id=article_id),
             
         }
-        # return HttpResponse("hello world ")
+        
         return  render (request,'article_module/article-detail.html',context )
-        # return JsonResponse({
-        # 'status' : 'success' ,
-        # 'response' : data
-    # })
+        
 
 class CreateComment(CreateView):
     model=ArticleComments

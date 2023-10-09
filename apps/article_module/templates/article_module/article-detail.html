@@ -35,10 +35,8 @@ article detail
             <p>{{ article.text }}</p>
           <div class="about-author">
           <h4>about writer  </h4>
-                 {{ article.writer.avatar }}
-                               <img style="padding: 10px" src="{{ image.url}}" alt="Avatar" class="pull-left">
+                 
                                 
-              <p>{{article.writer.talent.all|join:" / "}}</p>
 
           <a class="teacher-name" href="#"> {{ article.writer }}  </a>
               <p class="abs"> {{ article.writer.about}} </p><div class="clearfix"></div>
@@ -144,24 +142,8 @@ article detail
     </div>
 </div>
 
-        <h4>last post</h4>
-        {% for latest_article in latest_articles %}
-        <div class="recent-post clearfix"> {{latest_article.image}}
-        <img src="{{ image.url }}" alt="recent" class="pull-left"> 
-        <a href="{% url "article:article-detail" latest_article.slug %}">{{ latest_article.title }}</a>
-        <div class="author"> <a href="">{{ latest_article.writer }}</a><span>{{ latest_article.date }}</span> </div>
+       
     
-    </div>
-    {% endfor %}
-
-    <div class="categories">
-      <h6>categories</h6>
-      <ul>
-     {% for category in categories %}
-           <li><a href="{% url "article:article-list-by-category" category.title %}">{{ category }} ({{ category.aricle_count }})</a></li>
-     {% endfor %}
-
-      </ul>
 
 
     </div>

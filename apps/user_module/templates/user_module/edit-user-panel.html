@@ -10,9 +10,6 @@ User Panel
             <div class="container success ">
                 <div class="row">
         <div class="col-md-4">
-            <a href="" class="thumbnail">
-                <img src="{{ user.avatar.url }}" alt="">
-            </a>
             
         <div class="list-group list-group-light">
         <a href="{% url "user:user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
@@ -31,5 +28,21 @@ User Panel
 
         </div>
     </form></div></div></div></main>
+
+    <a href="{% url "user:upload-avatar" %}">   
+        <p> upload Avatars </p>
+    </a>
+    
+     <h2>My Avatars</h2>
+    <ul>
+        {% if avatars %}
+        {% for avatar in avatars %}
+            <li><img src="{{ avatar.avatar.url }}" alt="Avatar"></li>
+        {% endfor %}
+        {% else %}
+        <p>No Avatar</p>
+        {% endif %}
+    </ul> 
+    
 
 {% endblock %}

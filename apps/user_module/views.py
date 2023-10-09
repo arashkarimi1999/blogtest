@@ -9,38 +9,41 @@ from django.views.generic.base import View, TemplateView
 from django.conf import settings
 from django.core.mail import send_mail
 from apps.user_module.forms import RegisterForm, LoginForm, ForgetPassForm, ResetPasswordForm, EditPanelForm, \
-    EditPasswordForm
-from apps.user_module.models import User
+    EditPasswordForm,AvatarForm
+from apps.user_module.models import User,Avatar
 
 
 class UserPanelView(TemplateView):
     template_name = "user_module/user-panel.html"
 
 
-def user_panel_components(request):
-    return  render(request,"user_module/user-components/user-panel-component.html",context={})
 
 
 class EditUserPanelView(View):
     def get(self,request):
         current_user :User = User.objects.filter(id=request.user.id).first()
         form = EditPanelForm(instance=current_user)
+        avatars=Avatar.objects.filter(user=current_user)
         context = {
             "form": form ,
-            "user" : current_user
+            "user" : current_user,
+            "avatars":avatars
+            
         }
         return render(request, "user_module/edit-user-panel.html",context)
 
     def post(self,request):
         current_user: User = User.objects.filter(id=request.user.id).first()
         form = EditPanelForm(request.POST , request.FILES ,instance=current_user)
+        avatar_form=AvatarForm(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=True)
-
-
+        
+        avatars = Avatar.objects.filter(user=request.user)
         context = {
             "form": form,
-            "user": current_user
+            "user": current_user,
+            
         }
         return render(request, "user_module/edit-user-panel.html", context)
 
@@ -51,7 +54,8 @@ class EditUserPasswordView(View):
         current_user : User = User.objects.filter(id = request.user.id).first()
         context = {
             "current_user" : current_user ,
-            "edit_form" : edit_form
+            "edit_form" : edit_form,
+            
         }
         return render(request, 'user_module/user-pass-edit.html' , context)
 
@@ -210,3 +214,15 @@ class ResetPasswordView(View):
         }
 
         return render(request, 'user_module/reset_password.html', context)
+
+class  upload_avatar(CreateView):
+    model=Avatar
+    form_class=AvatarForm
+    template_name ='user_module/upload_avatar.html'
+    success_url = '#'
+
+    def form_valid(self, form):
+
+        form.instance.user = self.request.user
+        # You can perform additional actions here if needed
+        return super().form_valid(form)

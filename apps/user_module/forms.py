@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 
-from apps.user_module.models import User
+from apps.user_module.models import User,Avatar
 
 
 class RegisterForm(forms.Form):
@@ -118,9 +118,10 @@ class ResetPasswordForm(forms.Form):
         }))
 
 class EditPanelForm(forms.ModelForm):
+    
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username','number','avatar']
+        fields = ['first_name', 'last_name', 'username','number']
         
         widgets = {
             'first_name': forms.TextInput( attrs={
@@ -142,7 +143,6 @@ class EditPanelForm(forms.ModelForm):
                 'name': 'text',
                 'type': "text"
             }),
-            "avatar" : forms.FileInput()
 
 
 
@@ -152,10 +152,19 @@ class EditPanelForm(forms.ModelForm):
             'last_name': ' last_name ',
             'username': 'username',
             'number': 'number',
-            'avatar' : 'avatar',
+            'avatar' : 'avatars',
 
         }
 
+        
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ['avatar']
+
+        
+        
 
 class EditPasswordForm(forms.Form):
     current_password = forms.CharField(
