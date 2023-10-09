@@ -1,35 +1,27 @@
+{% extends 'base.html' %}
 
-{% block title %}
-User Panel
-{% endblock %}
-{% block header_slider %}
-<body id="contact" class="page">
-{% endblock %}
-{% block body %}
-<main>
-            <div class="container success ">
-                <div class="row">
-        <div class="col-md-4">
-            <a href="" class="thumbnail">
-                <img src="{{ user.avatar.url }}" alt="">
-            </a>
-            
-        <div class="list-group list-group-light">
-        <a href="{% url "user:user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 active" aria-current="true">
-       user panel  </a>
-    <a href="{% url "user:edit-user-password" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">change pasword </a>
-    <a href="{% url "user:edit-user-panel" %}" class="list-group-item list-group-item-action px-3 border-0 ripple">edit user information</a>
-        </div>
-            </div>
+{% block content %}
+    <h2>Edit User</h2>
 
-              <div class="container success">
-    <form enctype="multipart/form-data" action="{% url "user:edit-user-panel" %}" method="post" class="contact">
+    <form action="" method="post" class="col-md-6 mx-auto" novalidate>
         {% csrf_token %}
-                <div class="col-md-8">
-           {{ form.as_table }}
-            <button type="submit" name="submit" class="greybutton">ارسال</button>
+        {{ form.as_p }}
+        <input type="submit" value="submit">
+    </form>
 
-        </div>
-    </form></div></div></div></main>
+    <a href="{% url "user:upload-avatar" %}">   
+        <p> upload Avatars </p>
+    </a>
+    
+     <h2>My Avatars</h2>
+    <ul>
+        {% if avatars %}
+        {% for avatar in avatars %}
+            <li><img src="{{ avatar.avatar.url }}" alt="Avatar"></li>
+        {% endfor %}
+        {% else %}
+        <p>No Avatar</p>
+        {% endif %}
+    </ul> 
 
 {% endblock %}

@@ -2,7 +2,7 @@ from django import forms
 from django.core import validators
 from django.core.exceptions import ValidationError
 
-from apps.user_module.models import User
+from apps.user_module.models import User, Avatar
 
 
 class RegisterForm(forms.Form):
@@ -67,15 +67,12 @@ class RegisterForm(forms.Form):
         if p1 and p2 and p1 != p2:
             raise ValidationError('password must match')
     
-    # avatar=forms.FileField(label="avatar")
-
-
-    # def clean_username(self):
-    #     username = self.cleaned_data.get("username")
-    #     user: User = User.objects.filter(username__iexact=username)
-    #
-    #     if user :
-    #         raise ValidationError('کاربری با این نام وجود دارد')
+    # def clean_email(self):
+    #     email = self.cleaned_data['email']
+    #     user = User.objects.filter(email=email).exists()
+    #     if user:
+    #         raise ValidationError('this email already exists')
+    #     return email
 
 
 class LoginForm(forms.Form):
@@ -136,44 +133,50 @@ class ResetPasswordForm(forms.Form):
 
 
 class EditPanelForm(forms.ModelForm):
-
+    
     class Meta:
         model = User
-        fields = ['first_name', 'last_name', 'username','number','avatar']
+        fields = ['first_name', 'last_name', 'username', 'number']
         
         widgets = {
             'first_name': forms.TextInput( attrs={
-                'class': "req",
+                'class': "form-control",
                 'placeholder': "name  ",
                 'name': 'name',
                 'type': "text"
             }),
             'last_name': forms.TextInput(attrs={
-                'class': "req",
+                'class': "form-control",
                 'placeholder': "lastname   ",
                 'name': 'name',
                 'type': "text"
             }),
-
             'number': forms.NumberInput(attrs={
-                'class': "req",
+                'class': "form-control",
                 'placeholder': "mobile phone  ",
                 'name': 'text',
                 'type': "text"
             }),
-            "avatar" : forms.FileInput()
-
-
-
+            'username': forms.NumberInput(attrs={
+                'class': "form-control",
+                'placeholder': "email",
+                'name': 'email',
+                'type': "email"
+            }),
         }
         labels = {
             'first_name': ' first_name',
             'last_name': ' last_name ',
-            'username': 'username',
+            'username': 'email',
             'number': 'number',
-            'avatar' : 'avatar',
-
+            'avatar' : 'avatars',
         }
+
+
+class AvatarForm(forms.ModelForm):
+    class Meta:
+        model = Avatar
+        fields = ['avatar']
 
 
 class EditPasswordForm(forms.Form):

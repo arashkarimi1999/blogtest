@@ -10,8 +10,8 @@ from django.views.generic.base import View, TemplateView
 from django.conf import settings
 from django.core.mail import send_mail
 from apps.user_module.forms import RegisterForm, LoginForm, ForgetPassForm, ResetPasswordForm, EditPanelForm, \
-    EditPasswordForm
-from apps.user_module.models import User
+    EditPasswordForm, AvatarForm
+from apps.user_module.models import User, Avatar
 
 
 class UserPanelView(TemplateView):
@@ -23,27 +23,27 @@ def user_panel_components(request):
 
 
 class EditUserPanelView(View):
+    form_class = EditPanelForm
+    template_name = "user_module/edit-user-panel.html"
     def get(self,request):
         current_user :User = User.objects.filter(id=request.user.id).first()
-        form = EditPanelForm(instance=current_user)
-        context = {
-            "form": form ,
-            "user" : current_user
-        }
-        return render(request, "user_module/edit-user-panel.html",context)
+        form = self.form_class(instance=current_user)
+        avatars = Avatar.objects.filter(user=current_user)
+        return render(request, self.template_name, {'form': form, 'avatars': avatars})
 
     def post(self,request):
         current_user: User = User.objects.filter(id=request.user.id).first()
-        form = EditPanelForm(request.POST , request.FILES ,instance=current_user)
+        form = self.form_class(request.POST , request.FILES ,instance=current_user)
+        # avatar_form = AvatarForm(request.POST, request.FILES)
         if form.is_valid():
             form.save(commit=True)
-
-
-        context = {
-            "form": form,
-            "user": current_user
-        }
-        return render(request, "user_module/edit-user-panel.html", context)
+        # avatars = Avatar.objects.filter(user=request.user)
+        # context = {
+        #     "form": form,
+        #     "user": current_user,
+            
+        # }
+        return render(request, self.template_name, {'form': form})
 
 
 class EditUserPasswordView(View):
@@ -115,8 +115,9 @@ class UserActivateView(View):
                 user.save()
                 return redirect(reverse('user:login'))
             raise Http404
-        else:  # todo : user is already active !
-            pass
+        else:
+            messages.success(request, 'user is already active.', 'success')
+            return redirect(reverse('user:login'))
 
 
 class LoginView(View):
@@ -171,7 +172,6 @@ class ForgetPasswordView(View):
             if user:
                 user.activation_code = get_random_string(5)
                 user.save()
-                # form.add_error("email", "user with this email already exists")
                 send_mail(
                     "reset password code verigication",
                     f"http://127.0.0.1:8000/reset_password/{user.activation_code}",
@@ -179,7 +179,6 @@ class ForgetPasswordView(View):
                     [user.email, ]
                 )
                 messages.success(request, 'reset password link has sent to your email.', 'success')
-                # return redirect(reverse("user:reset-password"))
             else:
                 form.add_error('email', 'No user with that email address found.')
 
@@ -213,9 +212,17 @@ class ResetPasswordView(View):
             user.save()
             return redirect(reverse('user:login'))
 
-        # context = {
-        #     'reset_pass_form': reset_pass_form,
-        #     'user': user
-        # }
-
         return render(request, self.template_name, {'form': form})
+
+
+class upload_avatar(CreateView):
+    model = Avatar
+    form_class = AvatarForm
+    template_name = 'user_module/upload_avatar.html'
+    success_url = '#'
+
+    def form_valid(self, form):
+
+        form.instance.user = self.request.user
+        # You can perform additional actions here if needed
+        return super().form_valid(form)
