@@ -59,6 +59,14 @@ class RegisterForm(forms.Form):
             'placeholder': "password confirmation",
         }))
     
+    def clean(self):
+        cd = super().clean()
+        p1 = cd.get('password')
+        p2 = cd.get('confirm_password')
+
+        if p1 and p2 and p1 != p2:
+            raise ValidationError('password must match')
+    
     # avatar=forms.FileField(label="avatar")
 
 
@@ -103,11 +111,11 @@ class ForgetPassForm(forms.Form):
 class ResetPasswordForm(forms.Form):
 
     password = forms.CharField(
-        label='password',
+        label='new password',
         widget=forms.PasswordInput(attrs={
             'class': 'form-control',
             'type': "password",
-            'placeholder': "passwrod",
+            'placeholder': "new password",
         }))
     
     confirm_password = forms.CharField(
@@ -117,6 +125,14 @@ class ResetPasswordForm(forms.Form):
             'type': "password",
             'placeholder': " password confirmation",
         }))
+    
+    def clean(self):
+        cd = super().clean()
+        p1 = cd.get('password')
+        p2 = cd.get('confirm_password')
+
+        if p1 and p2 and p1 != p2:
+            raise ValidationError('password must match')
 
 
 class EditPanelForm(forms.ModelForm):
@@ -178,7 +194,6 @@ class EditPasswordForm(forms.Form):
             'placeholder': "password",
         }))
 
-
     confirm_password = forms.CharField(
         label='password confirmation',
         widget=forms.PasswordInput(attrs={
@@ -186,3 +201,11 @@ class EditPasswordForm(forms.Form):
             'type': "password",
             'placeholder': "password confirmation",
         }))
+    
+    def clean(self):
+        cd = super().clean()
+        p1 = cd.get('password')
+        p2 = cd.get('confirm_password')
+
+        if p1 and p2 and p1 != p2:
+            raise ValidationError('password must match')

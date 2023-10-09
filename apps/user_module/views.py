@@ -4,6 +4,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.contrib import messages
 from django.views.generic import CreateView
 from django.views.generic.base import View, TemplateView
 from django.conf import settings
@@ -50,19 +51,11 @@ class EditUserPasswordView(View):
     template_name = 'user_module/user-pass-edit.html'
     def get(self,request):
         form = self.form_class()
-        current_user : User = User.objects.filter(id = request.user.id).first()
-        # context = {
-        #     "current_user" : current_user,
-        #     "edit_form" : edit_form
-        # }
         return render(request, self.template_name, {'form': form})
 
     def post(self,request):
         form = self.form_class(request.POST)
         current_user: User = User.objects.filter(id=request.user.id).first()
-        # context = {
-        #     "current_user": current_user,
-        #     "edit_form": edit_form }
         if form.is_valid():
             if current_user.check_password(form.cleaned_data.get("current_password")):
                 current_user.set_password(form.cleaned_data.get("password"))
@@ -100,8 +93,14 @@ class RegisterView(View):
                                 number=form.cleaned_data.get("phone_number"))
 
                 new_user.set_password(password)
-                send_mail("email verififcation code",f"http://127.0.0.1:8000/user-activation/{new_user.activation_code}",settings.EMAIL_HOST_USER,[new_user.email,])
+                send_mail(
+                    "email verififcation code",
+                    f"http://127.0.0.1:8000/user-activation/{new_user.activation_code}",
+                    settings.EMAIL_HOST_USER,
+                    [new_user.email, ]
+                )
                 new_user.save()
+                messages.success(request, 'verification link has sent to your email.', 'success')
                 return redirect(reverse('user:login'))
             
         return render(request, 'user_module/register_form.html', {"form": form})
@@ -155,60 +154,68 @@ class LogoutView(LoginRequiredMixin, View):
         logout(request)
         return redirect(reverse("home:home_page"))
 
+
 class ForgetPasswordView(View):
+    form_class = ForgetPassForm
+    template_name = "user_module/forget_password.html"
+    
     def get(self, request):
-        forget_pass_form = ForgetPassForm()
-        context = {
-            "forget_form": forget_pass_form
-        }
-        return render(request, "user_module/forget_password.html", context)
+        form = self.form_class()
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request):
-        forget_pass_form = ForgetPassForm(request.POST)
-        if forget_pass_form.is_valid():
-            email = forget_pass_form.cleaned_data.get("email")
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get("email")
             user: User = User.objects.filter(email__iexact=email).first()
-            if user is not None :
-                forget_pass_form.add_error("email", "user with this email already exists")
-            send_mail("email code verigication", {"user": user}, "user_module/email/reset_code.html", user.email )
-            return redirect(reverse("user:reset-password"))
+            if user:
+                user.activation_code = get_random_string(5)
+                user.save()
+                # form.add_error("email", "user with this email already exists")
+                send_mail(
+                    "reset password code verigication",
+                    f"http://127.0.0.1:8000/reset_password/{user.activation_code}",
+                    settings.EMAIL_HOST_USER,
+                    [user.email, ]
+                )
+                messages.success(request, 'reset password link has sent to your email.', 'success')
+                # return redirect(reverse("user:reset-password"))
+            else:
+                form.add_error('email', 'No user with that email address found.')
 
-        context = {
-            "forget_form": forget_pass_form
-        }
-        return render(request, "user_module/forget_password.html", context)
+        return render(request, self.template_name, {'form': form})
 
 
 class ResetPasswordView(View):
+    form_class = ResetPasswordForm
+    template_name = 'user_module/reset_password.html'
+
     def get(self, request: HttpRequest, activation_code):
+        form = self.form_class()
         user: User = User.objects.filter(activation_code__iexact=activation_code).first()
         if user is None:
+            messages.error(request, 'your code is wrong', 'warning')
             return redirect(reverse('user:login'))
 
-        reset_pass_form = ResetPasswordForm()
-
-        context = {
-            'reset_pass_form': reset_pass_form,
-            'user': user
-        }
-        return render(request, 'user_module/reset_password.html', context)
+        return render(request, self.template_name, {'form': form})
 
     def post(self, request: HttpRequest, activation_code):
-        reset_pass_form = ResetPasswordForm(request.POST)
+        form = self.form_class(request.POST)
         user: User = User.objects.filter(activation_code__iexact=activation_code).first()
-        if reset_pass_form.is_valid():
+        if form.is_valid():
             if user is None:
+                messages.error(request, 'your code is wrong', 'warning')
                 return redirect(reverse('user:login'))
-            user_new_pass = reset_pass_form.cleaned_data.get('password')
+            user_new_pass = form.cleaned_data.get('password')
             user.set_password(user_new_pass)
-            user.activation_code = get_random_string(72)
+            user.activation_code = get_random_string(5)
             user.is_active = True
             user.save()
             return redirect(reverse('user:login'))
 
-        context = {
-            'reset_pass_form': reset_pass_form,
-            'user': user
-        }
+        # context = {
+        #     'reset_pass_form': reset_pass_form,
+        #     'user': user
+        # }
 
-        return render(request, 'user_module/reset_password.html', context)
+        return render(request, self.template_name, {'form': form})
