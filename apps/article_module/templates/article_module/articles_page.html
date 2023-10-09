@@ -5,6 +5,7 @@
     articles  
 {% endblock %}
 
+
 {% block body %}
     <body id="blog-2" class="page">
     <main>
@@ -23,7 +24,7 @@
                         
                     </div>
           <h3>{{ articles.title }}</h3>
-          <div class="author"> <a href="#"> {{ articles.selected_categories.all|join:" / " }}  </a><br> <span> {{articles.date }} - {{ articles.writer }}   </span> </div>
+          <div class="author">  {{ articles.selected_categories.all|join:" / " }}  </a><br> <span> {{articles.date }} - {{ articles.writer }}   </span> </div>
           <p class="abs"> {{ articles.short_description }} <a href="{% url "article:article-detail"  articles.slug %}" class="pull-right greybutton">more  </a> </div>
             {% endfor %}
 
@@ -57,7 +58,7 @@
       <h6>  categories </h6>
       <ul>
      {% for category in categories %}
-           <li><a href="{% url "article:article-list-by-category" category.title %}">{{ category }} ({{ category.aricle_count }})</a></li>
+           <li><a href="{% url "article:article-by-category-list" category.title %}">{{ category }} {{ category.aricle_count }}</a></li>
      {% endfor %}
 
       </ul>
