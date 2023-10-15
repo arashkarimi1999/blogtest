@@ -1,12 +1,13 @@
+{% extends 'base.html' %}
 
-
+{% block content %}
 
 {% block title %}
-article detail
+
 {% endblock %}
 {% block body %}
 
-<body id="blog-1" class="page">
+<body id="blog-1" class="">
 
   <style>
     .div1 {
@@ -27,19 +28,20 @@ article detail
       <h2>{{ article.title }}</h2>
     </div>
   </div>
-  <div class="container">
+  <div class="container-fluid">
     <div class="row">
-      <div class="col-lg-9">  <img src="{{ article.image.url }}" alt="blog-single" class="resp-img" data-article-id="{{ article.id }}">
-        <h3>{{ article.title }}</h3>
-        <div class="author">  <a href="#"> {{ article.writer  }} </a><span>  {{ article.date_created }}  </span> </div>
-            <p>{{ article.text }}</p>
-          <div class="about-author">
+      <div class=" text-center">  <img src="{{ article.image.url }}" width="100%" height=auto alt="blog-single" class="resp-img"  data-article-id="{{ article.id }}">
+       <h3>{{ article.title }}</h3>
+      </div>
+        <div class="author d-flex justify-content-around flex-row flex-wrap m-5">  <a href="#"> {{ article.author  }} </a><span>  {{ article.date_created }}  </span> </div>
+            <p class="m-5">{{ article.text }}</p>
+          <div class="about-author text-center">
           <h4>about writer  </h4>
                  
                                 
 
-          <a class="teacher-name" href="#"> {{ article.writer }}  </a>
-              <p class="abs"> {{ article.writer.about}} </p><div class="clearfix"></div>
+          <a class="teacher-name text-center" href="#"> {{ article.author.first_name }}  </a>
+              <p class="abs m-5"> {{ article.author.about}} </p><div class="clearfix"></div>
 
 
 
@@ -49,9 +51,9 @@ article detail
 
   
   <h2>comments  ({{ comment_count }})</h2>
-              <ul class="media-list">
+              <ul class="media-list ">
                 {% for comment in comments %}
-                <li class="media">
+                <div class="media card m-5">
                 <div class="div1" id="comment_section">
 
                     <a class="pull-right" href="#">
@@ -59,11 +61,11 @@ article detail
                         <img src="{{ image.url }}">
                     </a>
                     <div class="media-body">
-                        <ul class="sinlge-post-meta">
-                            <li><i class="en en-user"></i>{{ comment.author.get_full_name }}</li>
-                            <li><i class="en en-calendar"></i>{{ comment.date_created }}</li>
-                        </ul> 
-                        <div class="comment" data-comment-id="{{ comment.id }}">
+                        <div class="sinlge-post-meta card-header">
+                            <div><i class="en en-user"></i>{{ comment.author.get_full_name }}</div>
+                            <div><i class="en en-calendar"></i>{{ comment.date_created }}</div>
+                        </div> 
+                        <div class="comment card-body" data-comment-id="{{ comment.id }}">
                             <p>{{ comment.text }}</p>
                             <form action="articles-comment" method="get">
                               {% csrf_token %}
@@ -78,14 +80,15 @@ article detail
                               <button type="submit">send</button>
                           </form>
                             <div class="response"></div>
-                        </div>                      </li>
-                    </div>
-                  </div>
-
-                    </div>
+                        </div>       
+                      </div>    
+                    </div>           </div>
+                 
+                  
+ 
                       <div class="div2">
                       {% for answer in comment.parent_comment.all %}
-                                        <li class="media second-media">
+                                        <div class="media second-media">
                                           {% if answer.author.avatar %}
                   <a class="pull-right" href="#">
                           {{ answer.author.avatar }}
@@ -96,22 +99,21 @@ article detail
   
                           {% endif %}
                   </a>
-                  <div class="media-body">
-                    <ul class="sinlge-post-meta">
-                      <li><i class="en en-user"></i>{{ answer.author.get_full_name }}</li>
-                      {% comment %} <li><i class="en en-clock-o"></i> 13:33 ب.ظ</li> {% endcomment %}
-                      <li><i class="en en-calendar"></i>{{ answer.date_created }}</li>
-                    </ul>
-                    <p>{{ answer.text }}</p>
+                  <div class="media-body card " style="margin-left: 65px;">
+                    <div class="sinlge-post-meta card-header">
+                      <div><i class="en en-user"></i>{{ answer.author.get_full_name }}</div>
+                      {% comment %} <div><i class="en en-clock-o"></i> 13:33 ب.ظ</div> {% endcomment %}
+                      <div><i class="en en-calendar"></i>{{ answer.date_created }}</div>
+                    </div>
+                    <p class="card-body">{{ answer.text }}</p>
   
-                  </div>
-                </li>
-                        
-                {% endfor %}{% endfor %}
+                 </div>
+           
+            </div>
+                {% endfor %}</div>{% endfor %}
   
               </ul>
   
-            </div>
         <div class="replay-box">
 
 
@@ -130,16 +132,16 @@ article detail
                   
                           <button type="submit">send</button>
                       </form>
-                    </div>
+                    </div>{% else %}
+                    <div class="alert alert-warning">
+                     for add comment you have to  <a href="{% url 'user:login' %}">login</a> first {% endif %}
+  
+  
+  
+          </div></div>
                 </div>
-                </div>{% else %}
-                  <div class="alert alert-warning">
-                   for add comment you have to  <a href="{% url 'user:login' %}">login</a> first {% endif %}
-
-
-
-        </div><!--/Repaly Box-->
-    </div>
+                <!--/Repaly Box-->
+    
 </div>
 
        
@@ -147,13 +149,10 @@ article detail
 
 
     </div>
-  </div>
 
-
-
-</div>
     
 
 
 </body>
+{% endblock %}
 {% endblock %}

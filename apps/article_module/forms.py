@@ -8,11 +8,7 @@ class CreateArticleForm(forms.ModelForm):
         model=Article
         fields = ["title",'slug','selected_categories','short_description','text','image']
         # fields='__all__'
-    # categories = forms.ModelMultipleChoiceField(
-    #     queryset=ArticleCategory.objects.all(),
-    #     widget=forms.CheckboxSelectMultiple,
-    #     required=False  # Make it optional, remove this line if it should be required
-    # )
+
 
 class CommentForm(forms.ModelForm):
     

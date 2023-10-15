@@ -1,71 +1,86 @@
+{% extends 'base.html' %}
 
-{% comment %} {% load render_partial %}
-{% load sorl_thumbnail %} {% endcomment %}
-{% block title %}
-    articles  
-{% endblock %}
-
-
-{% block body %}
-    <body id="blog-2" class="page">
-    <main>
-  <div class="page-heading text-center">
-    <div class="container">
-      <h2>blog </h2>
-    </div>
-  </div>
+{% block content %}
+<body id="blog-2" class="page">
+  <main>
+<div class="page-heading text-center">
   <div class="container">
-    <div class="row">
-      <div class="col-lg-9">
-            {% for articles in article %}
-                    <div class="blog-item clearfix"> <div class="blog-item clearfix">
+    <h2>blog </h2>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <h4>last posts   </h4>
+    <div class="col-lg-9">
+          {% for articles in article %}
+                  <div class="blog-item clearfix">
+                       <div class="blog-item clearfix">
+                    
+                            <img src="{{ articles.image.url }}" alt="blog-single" class="resp-img"  width="100%" height="auto">
                       
-                              <img src="{{ articles.image.url }}" alt="blog-single" class="resp-img">
-                        
-                    </div>
-          <h3>{{ articles.title }}</h3>
-          <div class="author">  {{ articles.selected_categories.all|join:" / " }}  </a><br> <span> {{articles.date }} - {{ articles.writer }}   </span> </div>
-          <p class="abs"> {{ articles.short_description }} <a href="{% url "article:article-detail"  articles.slug %}" class="pull-right greybutton">more  </a> </div>
-            {% endfor %}
+                  </div>
+        <h3>{{ articles.title }}</h3>
+        <div class="author">
+           <a href="#"> {{ articles.selected_categories.all|join:" / " }}  </a>
+           <br> <span> {{articles.date_created }} - {{ articles.author.first_name }}   </span> 
+          </div>
+        <p class="abs"> {{ articles.short_description }} 
+          <br>
+          <a href="{% url "article:article-detail"  articles.slug %}" class="pull-right mt-3 greybutton btn btn-secondary">more  </a>
+       </div>
+       <hr>
+          {% endfor %}
 
 
-        <div class="paginations">
+      <div class="paginations">
 
-            {% if page_obj.has_previous %}
-                <a class="prev" href="?page={{ page_obj.previous_page_number }}"><i class="zmdi zmdi-chevron-right"></i>previpus  </a>
-            {% endif %}
+          {% if page_obj.has_previous %}
+              <a style="text-decoration: none;
+              display: inline-block;
+              padding: 8px 16px;   background-color: #f1f1f1;
+  color: black; font-size: large;" class="prev" href="?page={{ page_obj.previous_page_number }}">&#8249;  </a>
+          {% endif %}
 
-           {% for page in paginator.page_range %}
-            <a href="?page={{ page }}" class="{% if page_obj.number == page%} active {% endif %} " >{{ page }}</a>
-           {% endfor %}
+         {% for page in paginator.page_range %}
+          <a style="text-decoration: none;
+          display: inline-block;
+          padding: 8px 16px;   background-color: #f1f1f1;
+  color: black; font-size: large;" href="?page={{ page }}" class="{% if page_obj.number == page%} active {% endif %} " >{{ page }}</a>
+         {% endfor %}
 
 
-           {% if page_obj.has_next %}
-             <a class="next" href="?page={{ page_obj.next_page_number }}">next <i class="zmdi zmdi-chevron-left"></i></a> </div>
-           {% endif %}
+         {% if page_obj.has_next %}
+           <a class="next" href="?page={{ page_obj.next_page_number }}">next <i class="zmdi zmdi-chevron-left">&#8250;</i></a> 
+         {% endif %}
       </div>
+    </div>
+    
+      <div class="col-lg-3">
       
-        
-        <h4>last posts   </h4>
-        {% for latest_article in latest_articles %}
-        <div class="recent-post clearfix"> {{latest_article.image}}
-        <img src="{{ image.url }}" alt="recent" class="pull-left">
-        <a href="{% url "article:article-detail" latest_article.slug %}">{{ latest_article.title }}</a>
-        <div class="author"> <a href="">{{ latest_article.writer }}</a><span>{{ latest_article.date }}</span> </div>
-    {% endfor %}
-    </div>
-    <div class="categories">
-      <h6>  categories </h6>
-      <ul>
-     {% for category in categories %}
-           <li><a href="{% url "article:article-by-category-list" category.title %}">{{ category }} {{ category.aricle_count }}</a></li>
-     {% endfor %}
-
-      </ul>
-    </div>
+      {% for latest_article in latest_articles %}
+      <div class="recent-post card mt-5 clearfix"> {{latest_article.image}}
+      <img src="{{ image.url }}" alt="recent" class="pull-left card-header"  width="100%" height="auto">
+      <a style="text-decoration: none;" href="{% url "article:article-detail" latest_article.slug %}">{{ latest_article.title }}</a>
+      <div class="author">
+           <a href="">{{ latest_article.author.first_name }}</a><span>{{ latest_article.date_created }}</span>
+       </div>
       </div>
+  {% endfor %}
+</div>
+  <div class="categories">
+    <h6>  categories </h6>
+    <ul>
+   {% for category in categories %}
+         <li class="btn ">
+          <a href="{% url "article:article-by-category-list" category.title %}" class="btn btn-primary">{{ category }}</a>
+      </li>
+   {% endfor %}
+
+    </ul>
+  </div>
     </div>
   </div>
+
 </main>
-    </body>
+</body>
 {% endblock %}

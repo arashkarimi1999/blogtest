@@ -28,7 +28,7 @@ class ArticlesView(ListView):
         context = super(ArticlesView, self).get_context_data(*args, **kwargs)
         categories=ArticleCategory.objects.all()
         context["categories"]=categories
-        print(context)
+        # print(context)
         return context
 
     def get_queryset(self):
@@ -59,7 +59,7 @@ def add_article_comment(request:HttpRequest):
         article_id = request.GET.get('article_id')
         article_comment = request.GET.get('article_comment')
         parent_id = request.GET.get('parent_id')
-        print(article_comment,article_id,parent_id)
+        # print(article_comment,article_id,parent_id)
         new_comment = ArticleComments(article_id=article_id, text=article_comment ,author_id=request.user.id, parent_id=parent_id)
         new_comment.save()
 
@@ -87,7 +87,7 @@ def is_superuser_or_admin(user):
     return user.is_superuser 
 
 
-class CreateArticle(UserPassesTestMixin,CreateView):
+class CreateArticle(CreateView):
     
     model=Article
     form_class=CreateArticleForm
@@ -109,7 +109,7 @@ def UserArticles(request):
     if request.method=="GET":
         if request.user.is_authenticated:
             user_articles=Article.objects.filter(author=request.user)
-            print(user_articles)
+            # print(user_articles)
 
             return render(request,"article_module/user_article.html",  {'articles': user_articles} )
 

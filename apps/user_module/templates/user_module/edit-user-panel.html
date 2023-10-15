@@ -2,26 +2,26 @@
 
 {% block content %}
     <h2>Edit User</h2>
+    
+    <h2>My Avatars</h2>
+   <div style="display: flex;" class="d-flex flex-row justify-content-around  flex-wrap">
+       {% if avatars %}
+       {% for avatar in avatars %}
+           <div style="margin: 8px;"><img src="{{ avatar.avatar.url }}" alt="Avatar" width="200px" height="200px"></div>
+       {% endfor %}
+       {% else %}
+       <p>No Avatar</p>
+       {% endif %}
+           </div> 
 
     <form action="" method="post" class="col-md-6 mx-auto" novalidate>
         {% csrf_token %}
         {{ form.as_p }}
         <input type="submit" value="submit">
     </form>
-
-    <a href="{% url "user:upload-avatar" %}">   
-        <p> upload Avatars </p>
-    </a>
+    <div class="text-center mx-auto col-md-2">
+        <a href="{% url 'user:upload-avatar' %}" class="btn btn-primary list-group-item list-group-item-action">Upload Avatars</a>
+    </div>
     
-     <h2>My Avatars</h2>
-    <ul>
-        {% if avatars %}
-        {% for avatar in avatars %}
-            <li><img src="{{ avatar.avatar.url }}" alt="Avatar"></li>
-        {% endfor %}
-        {% else %}
-        <p>No Avatar</p>
-        {% endif %}
-    </ul> 
 
 {% endblock %}

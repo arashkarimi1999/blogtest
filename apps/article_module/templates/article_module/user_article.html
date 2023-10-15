@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>edit Articles</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+{% block content %}
     <h1>Your Articles</h1>
     <ul>
         {% for article in articles %}
@@ -14,5 +11,4 @@
 
             {% endfor %}
     </ul>
-</body>
-</html>
+{% endblock %}
